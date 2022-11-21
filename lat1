@@ -1,0 +1,139 @@
+#include <LiquidCrystal.h>
+#include <Keypad.h>
+#include <Stepper.h>
+
+const int stepsPerRevolution = 48;
+Stepper myStepper(stepsPerRevolution, 52, 50, 48, 46);
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+#define ledred 22
+#define ledyell 24
+#define ledgreen 26
+
+int limit = 2;
+int total_Range = 20;
+int trigPin = 28;
+int echoPin = 30;
+int duration_us, distance_cm;
+const byte ROWS = 4;
+const byte COLS = 4;
+char hexaKeys[ROWS][COLS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+byte rowPins[ROWS] = {53, 51, 49, 47};
+byte colPins[COLS] = {45, 43, 41, 39};
+Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
+void setup() {
+
+  lcd.begin(16, 2);
+  lcd.print("Hai Semua");
+  pinMode(ledred, OUTPUT);
+  pinMode(ledyell, OUTPUT);
+  pinMode(ledgreen, OUTPUT);
+  Serial.begin (9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  kedip();
+  myStepper.setSpeed(60);
+
+}
+void kedip() {
+  delay(2000);
+  lcd.setCursor(0, 0);
+  lcd.print("mari berhitung");
+  digitalWrite(ledred, HIGH);
+  delay(250);
+  digitalWrite(ledred, LOW);
+  delay(250);
+  digitalWrite(ledred, HIGH);
+  delay(250);
+  digitalWrite(ledred, LOW);
+  delay(250);
+  digitalWrite(ledred, HIGH);
+  delay(250);
+  digitalWrite(ledred, LOW);
+  delay(250);
+  digitalWrite(ledyell, HIGH);
+  delay(250);
+  digitalWrite(ledyell, LOW);
+  delay(250);
+  digitalWrite(ledyell, HIGH);
+  delay(250);
+  digitalWrite(ledyell, LOW);
+  delay(250);
+  digitalWrite(ledyell, HIGH);
+  delay(250);
+  digitalWrite(ledyell, LOW);
+  delay(250);
+  digitalWrite(ledgreen, HIGH);
+  delay(250);
+  digitalWrite(ledgreen, LOW);
+  delay(250);
+  digitalWrite(ledgreen, HIGH);
+  delay(250);
+  digitalWrite(ledgreen, LOW);
+  delay(250);
+  digitalWrite(ledgreen, HIGH);
+  delay(250);
+  digitalWrite(ledgreen, LOW);
+  delay(250);
+  lcd.clear();
+}
+void ultra() {
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration_us = pulseIn(echoPin, HIGH);
+  distance_cm = 0.017 * duration_us;
+
+
+
+  lcd.setCursor(0, 2);
+  if (distance_cm <= 20 && distance_cm >= 2) {
+    lcd.print("jarak: ");
+    lcd.print(distance_cm);
+    lcd.println(" cm      ");
+    delay(500);
+  }
+  else if (distance_cm < 2 ) {
+    lcd.print("jarak: 2        ");
+  }
+  else if (distance_cm > 20 ) {
+    lcd.print("jarak: 20cm        ");
+  }
+}
+void stepp() {
+  char Key = customKeypad.getKey();
+  if (Key == 'A') {
+    Serial.println("clockwise");
+    myStepper.step(stepsPerRevolution);
+    myStepper.step(stepsPerRevolution);
+
+    ;
+  }
+  if (Key == 'B') {
+    Serial.println("counterclockwise");
+    myStepper.step(-stepsPerRevolution);
+    myStepper.step(-stepsPerRevolution);
+
+
+  }
+  if (Key == '9') {
+    setup();
+
+  }
+}
+
+
+
+void loop() {
+  ultra();
+  stepp();
+
+}
