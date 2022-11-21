@@ -1,0 +1,260 @@
+int a = 2;
+int b = 12;
+int c = 11;
+int d = 10;
+int e = 9;
+int f = 8;
+int g = 7;
+int push = 3;
+int status;
+int ledred = 6;
+int ledyell = 5;
+int ledgreen = 4;
+
+void setup() {
+  pinMode(a, OUTPUT);
+  pinMode(b, OUTPUT);
+  pinMode(c, OUTPUT);
+  pinMode(d, OUTPUT);
+  pinMode(e, OUTPUT);
+  pinMode(f, OUTPUT);
+  pinMode(g, OUTPUT);
+  pinMode(ledred, OUTPUT);
+  pinMode(ledyell, OUTPUT);
+  pinMode(ledgreen, OUTPUT);
+  pinMode(push, INPUT);
+}
+
+void loop() {
+  if ( digitalRead (push) == HIGH) {
+    status ++;
+    delay(100);
+
+  }
+  if (status == 1) {
+
+
+    Display_0();
+    digitalWrite(ledred, LOW);
+    digitalWrite(ledyell, LOW);
+    digitalWrite(ledgreen, LOW);
+    delay(100);
+  }
+  if (status == 2) {
+
+
+    Display_1();
+    digitalWrite(ledred, HIGH);
+    digitalWrite(ledyell, LOW);
+    digitalWrite(ledgreen, LOW);
+    delay(100);
+  }
+  if (status == 3) {
+
+
+    Display_2();
+    digitalWrite(ledred, HIGH);
+    digitalWrite(ledyell, LOW);
+    digitalWrite(ledgreen, LOW);
+    delay(100);
+  }
+  if (status == 4) {
+
+
+    Display_3();
+    digitalWrite(ledred, LOW);
+    digitalWrite(ledyell, HIGH);
+    digitalWrite(ledgreen, LOW);
+    delay(100);
+  }
+  if (status == 5) {
+
+
+    Display_4();
+    digitalWrite(ledred, LOW);
+    digitalWrite(ledyell, HIGH);
+    digitalWrite(ledgreen, LOW);
+    delay(100);
+  }
+  if (status == 6) {
+
+
+    Display_5();
+    digitalWrite(ledred, LOW);
+    digitalWrite(ledyell, HIGH);
+    digitalWrite(ledgreen, LOW);
+    delay(100);
+  }
+  if (status == 7) {
+
+
+    Display_6();
+    digitalWrite(ledred, LOW);
+    digitalWrite(ledyell, LOW);
+    digitalWrite(ledgreen, HIGH);
+    delay(100);
+  }
+  if (status == 8) {
+
+
+    Display_7();
+    digitalWrite(ledred, LOW);
+    digitalWrite(ledyell, LOW);
+    digitalWrite(ledgreen, HIGH);
+    delay(100);
+  }
+  if (status == 9) {
+
+
+    Display_8();
+    digitalWrite(ledred, LOW);
+    digitalWrite(ledyell, LOW);
+    digitalWrite(ledgreen, HIGH);
+    delay(100);
+  }
+  if (status == 10) {
+
+
+    Display_9();
+    digitalWrite(ledred, LOW);
+    digitalWrite(ledyell, LOW);
+    digitalWrite(ledgreen, LOW);
+    delay(100);
+  }
+  if (status == 11) {
+
+
+    Display_A();
+    digitalWrite(ledred, HIGH);
+    delay (250);
+    digitalWrite(ledyell, HIGH);
+      delay (100);
+    digitalWrite(ledgreen, HIGH);
+
+
+  }
+   if (status == 12) {
+      
+    digitalWrite(ledgreen, LOW);
+      delay (250);
+    digitalWrite(ledyell, LOW);
+      delay (250);
+    digitalWrite(ledred, LOW);
+    Display_Mati();
+      delay (100);
+
+  }
+  if (status == 13) {
+    status = 1;
+  }
+}
+
+void Display_0() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, HIGH);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, LOW);
+}
+
+void Display_1() {
+  digitalWrite(a, LOW);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, LOW);
+  digitalWrite(e, LOW);
+  digitalWrite(f, LOW);
+  digitalWrite(g, LOW);
+}
+void Display_2() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, LOW);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, HIGH);
+  digitalWrite(f, LOW);
+  digitalWrite(g, HIGH);
+}
+void Display_3() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, LOW);
+  digitalWrite(f, LOW);
+  digitalWrite(g, HIGH);
+}
+void Display_4() {
+  digitalWrite(a, LOW);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, LOW);
+  digitalWrite(e, LOW);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+}
+void Display_5() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, LOW);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, LOW);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+}
+void Display_6() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, LOW);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, HIGH);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+}
+void Display_7() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, LOW);
+  digitalWrite(e, LOW);
+  digitalWrite(f, LOW);
+  digitalWrite(g, LOW);
+}
+void Display_8() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, HIGH);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+}
+void Display_9() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, LOW);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+}
+void Display_A() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, LOW);
+  digitalWrite(e, HIGH);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+}
+void Display_Mati() {
+  digitalWrite(a, LOW);
+  digitalWrite(b, LOW);
+  digitalWrite(c, LOW);
+  digitalWrite(d, LOW);
+  digitalWrite(e, LOW);
+  digitalWrite(f, LOW);
+  digitalWrite(g, LOW);
+}
