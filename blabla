@@ -1,0 +1,38 @@
+void tombol()
+{
+     char key =keypad.getKey();
+
+if (key)
+     {
+            if (key=='1')
+             {
+              kondisi=1;
+
+        }
+     }
+}
+void loop()
+{
+   while (kondisi ==0)
+      {
+       lcd.setCursor(0,0);
+       lcd.print("awal");}
+while (kondisi ==1)
+{
+digitalWrite(lampu, HIGH);
+for (ulang =0;ulang<500;ulang++)
+{
+tombol();
+delay(1);
+}
+digitalWrite (lampu,LOW);
+for (ulang =0;ulang<500;ulang++)
+{
+tombol();
+delay(1);
+}
+
+
+
+
+}
