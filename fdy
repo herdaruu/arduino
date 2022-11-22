@@ -1,0 +1,289 @@
+#include <Keypad.h>     //keypad
+const int ROW_NUM = 4; //four rows
+const int COLUMN_NUM = 4; //four columns
+char key;
+
+char keys[ROW_NUM][COLUMN_NUM] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+
+byte pin_rows[ROW_NUM] = {40, 38, 36, 34}; //connect to the row pinouts of the keypad
+byte pin_column[COLUMN_NUM] = {28, 26, 24, 22}; //connect to the column pinouts of the keypad
+
+Keypad keypad = Keypad( makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_NUM );
+
+#include <LiquidCrystal.h> //LCD
+int i;
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+int kondisi = 0;
+
+#include <Wire.h>
+
+const byte echoPin = 6;//kaki ultrasonik
+const byte trigPin = 7;//kaki ultrasonik
+
+long duration; // variable for the duration of sound wave travel
+long distance;
+
+#include <DHT.h>
+#define datapin 13     // Digital pin we're connected to
+#define DHTTYPE DHT22
+DHT dht(datapin, DHTTYPE);
+
+#define merah 31
+#define kuning 32
+#define hijau 33
+#define buzz 30
+
+void setup()
+{
+  lcd.clear();
+  lcd.begin(16, 2);
+  dht.begin();
+  pinMode(merah, OUTPUT);
+  pinMode(kuning, OUTPUT);
+  pinMode(hijau, OUTPUT);
+  pinMode(buzz, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(trigPin, OUTPUT);
+}
+void loop()
+{
+  lanjut();
+
+  if (kondisi == 0)
+  {
+    lcd.clear();
+    while (kondisi == 0)
+    {
+      lcd.setCursor(1, 0);
+      lcd.print("SELAMAT DATANG");
+      lcd.setCursor(0, 1);
+      lcd.print("TEKAN * UTK NEXT");
+      lanjut();
+    }
+  }
+
+  if (kondisi == 1)
+  {
+    lcd.clear();
+    while (kondisi == 1)
+    {
+      lcd.setCursor(0, 0);
+      lcd.print("PRESS THE BUTTON");
+      lcd.setCursor(0, 1);
+      lcd.print("keyped :.....");
+      lanjut();
+    }
+  }
+  if (kondisi == 2)
+  {
+    lcd.clear();
+    while (kondisi == 2)
+    {
+      lcd.setCursor(0, 0);
+      lcd.print("PROGRAM : BLINK");
+      lcd.setCursor(2, 1);
+      lcd.print("keyped : 0");
+
+      digitalWrite(merah, HIGH);
+      digitalWrite(kuning, HIGH);
+      digitalWrite(hijau, HIGH);
+      delay(200);
+      digitalWrite(merah, LOW);
+      digitalWrite(kuning, LOW);
+      digitalWrite(hijau, LOW);
+      delay(200);
+      digitalWrite(merah, HIGH);
+      digitalWrite(kuning, HIGH);
+      digitalWrite(hijau, HIGH);
+      delay(200);
+      digitalWrite(merah, LOW);
+      digitalWrite(kuning, LOW);
+      digitalWrite(hijau, LOW);
+      delay(200);
+      digitalWrite(merah, HIGH);
+      digitalWrite(kuning, HIGH);
+      digitalWrite(hijau, HIGH);
+      delay(200);
+      digitalWrite(merah, LOW);
+      digitalWrite(kuning, LOW);
+      digitalWrite(hijau, LOW);
+      delay(200);
+      kondisi = 100;
+      lanjut();
+    }
+  }
+  if (kondisi == 3)
+  {
+    lcd.clear();
+    while (kondisi == 3)
+    {
+      lcd.setCursor(0, 0);
+      lcd.print("PROGRAM : RED ON");
+      lcd.setCursor(2, 1);
+      lcd.print("keypad : 1");
+      digitalWrite(merah, HIGH);
+      digitalWrite(kuning, LOW);
+      digitalWrite(hijau, LOW);
+      lanjut();
+    }
+  }
+  if (kondisi == 4)
+  {
+    lcd.clear();
+    while (kondisi == 4)
+    {
+      lcd.setCursor(0, 0);
+      lcd.print("PROGRAM : YLW ON");
+      lcd.setCursor(2, 1);
+      lcd.print("keypad : 2");
+      digitalWrite(kuning, HIGH);
+      digitalWrite(merah, LOW);
+      digitalWrite(hijau, LOW);
+      lanjut();
+    }
+  }
+  if (kondisi == 5)
+  {
+    lcd.clear();
+    while (kondisi == 5)
+    {
+      lcd.setCursor(0, 0);
+      lcd.print("PROGRAM : HJU ON");
+      lcd.setCursor(2, 1);
+      lcd.print("keypad : 3");
+      digitalWrite(kuning, LOW);
+      digitalWrite(merah, LOW);
+      digitalWrite(hijau, HIGH);
+      lanjut();
+    }
+  }
+  if (kondisi == 6)
+  {
+    ledoff();
+    lcd.clear();
+    Serial.println(" cm");
+    while (kondisi == 6)
+    {
+      ultra();
+            lcd.clear();
+            lcd.setCursor(0, 0);
+      lcd.print("distance: ");
+      lcd.print(distance);
+      delay(500);
+      if (distance < 5)
+      {
+        digitalWrite(buzz, HIGH);
+        digitalWrite(merah, HIGH);
+        digitalWrite(hijau, LOW);
+        
+        lanjut();
+      }
+      else
+      {
+        digitalWrite(merah, LOW);
+        digitalWrite(hijau, HIGH);
+        digitalWrite(buzz, LOW);
+        lanjut();
+      }
+    }
+  }
+  if (kondisi == 7)
+  {
+    lcd.clear();
+    ledoff();
+    while (kondisi == 7)
+    {
+      dht22(); 
+      kondisi = 97;
+      lanjut();  
+    }
+  }
+}
+
+
+void lanjut()
+{
+  char key = keypad.getKey();
+  if (key)
+  {
+    if (key == '*')
+    {
+      kondisi = 1;
+    }
+    if (key == '0') // blink
+    {
+      kondisi = 2;
+    }
+    if (key == '1') // merah on
+    {
+      kondisi = 3;
+    }
+    if (key == '2') // kuning on
+    {
+      kondisi = 4;
+    }
+    if (key == '3') // hijau on
+    {
+      kondisi = 5;
+    }
+    if (key == '4') // ultrasonik
+    {
+      kondisi = 6;
+    }
+    if (key == '5')
+    {
+      kondisi =7;
+    }
+    if (key == 'A') // reset
+    {
+      kondisi = 0;
+    }
+  }
+}
+void ultra()
+{
+  digitalWrite(kuning, HIGH);
+  delay(200);
+  digitalWrite(kuning, LOW);
+  delay(200);
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin HIGH (ACTIVE) for 10 microseconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
+  // Calculating the distance
+  distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
+  // Displays the distance on the Serial Monitor
+  //  Serial.print("Distance: ");
+  //  Serial.print(distance);
+  //  Serial.println(" cm");
+}
+void ledoff()
+{
+  digitalWrite(merah, LOW);
+  digitalWrite(kuning, LOW);
+  digitalWrite(hijau, LOW);
+}
+void dht22()
+{
+  /* Find Temperature & Humidity */
+  float air_temp = dht.readTemperature();
+  float humidity = dht.readHumidity();
+  
+  /* Print Output on LCD Screen */
+  lcd.setCursor(0,0);
+  lcd.print(String("Temp. ") + String(air_temp));
+  lcd.setCursor(0,1);
+  lcd.print(String("Humidity ") + String(humidity));
+
+  delay(2000);
+}
