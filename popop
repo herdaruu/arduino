@@ -1,0 +1,104 @@
+#define ledred 2
+#define ledyell 3
+#define ledgreen 4
+#include <LiquidCrystal.h>
+#include <DHT.h>;
+#include <Keypad.h>
+int pinBuzzer= 32;
+#define DHTPIN 29   
+#define DHTTYPE DHT22   
+DHT dht(DHTPIN, DHTTYPE);
+int chk;
+float hum;  //Stores humidity value
+float temp;
+char customKey;
+char getNewKey;
+const int rs = 22, en = 24, d4 = 44, d5 = 46, d6 = 48, d7 = 50;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+const byte ROWS = 4; 
+const byte COLS = 4; 
+
+char hexaKeys[ROWS][COLS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+
+byte rowPins[ROWS] = {12, 11, 10, 9}; 
+byte colPins[COLS] = {8, 7, 6, 5}; 
+
+Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
+
+void setup() {
+  // put your setup code here, to run once:
+pinMode(ledred, OUTPUT);
+pinMode(ledyell, OUTPUT);
+pinMode(ledgreen, OUTPUT);
+pinMode(pinBuzzer, OUTPUT);
+
+
+  Serial.begin(9600);
+  dht.begin();
+  lcd.begin(16, 2);
+  lcd.print("hallo anak anjing");
+}
+
+
+void checkKey(){
+  getNewKey = customKeypad.getKey();
+  if(getNewKey){
+    customKey = getNewKey;
+  }
+}
+
+void blinkLed(){
+  lcd.setCursor(0,0);
+  lcd.print("blinking        ");
+    digitalWrite(ledred,HIGH);
+  delay(1000);
+  checkKey();
+  digitalWrite(ledred, LOW);
+    delay(1000);
+    checkKey();
+    digitalWrite(ledyell,HIGH);
+    delay(1000);
+    checkKey();
+    digitalWrite(ledyell, LOW);
+        delay(1000);
+        checkKey();
+  digitalWrite(ledgreen,HIGH);
+  delay(1000);
+  checkKey();
+    digitalWrite(ledgreen,LOW);
+      delay(1000);
+      checkKey();
+}
+
+void checkDht(){
+  lcd.setCursor(0,0);
+  lcd.print("ampun suhu         ");
+    hum = dht.readHumidity();
+    temp= dht.readTemperature();
+    Serial.print("Humidity: ");
+    Serial.print(hum);
+    Serial.print(" %, Temp: ");
+    Serial.print(temp);
+    Serial.println(" Celsius");
+    delay(1000); //Delay 2 sec.
+}
+
+void loop() {
+checkKey();
+if(customKey == '1'){
+  blinkLed();
+}else if(customKey == '2'){
+  checkDht();
+}
+else if (customKey=='3'){
+  digitalWrite(pinBuzzer, HIGH);
+}
+else if (customKey=='4'){
+  digitalWrite(pinBuzzer, LOW);
+}
+}
