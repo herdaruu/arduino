@@ -1,0 +1,151 @@
+#include <TM1637.h>
+// led indicator
+#define lr 6
+#define ly 7
+#define lg 8
+
+// push button
+#define pbr 52
+#define pby 50
+#define pbg 48
+
+//TM1637
+#define tmdio 34
+#define tmclk 36
+TM1637 tm(tmclk, tmdio);
+
+int sec = 0;
+int secdua = 0;
+int mnt = 0;
+int mntdua = 0;
+int jeda;
+int tekan = 0;
+
+void setup() {
+  pinMode(lr, OUTPUT);
+  pinMode(ly, OUTPUT);
+  pinMode(lg, OUTPUT);
+
+  pinMode(pbr, INPUT);
+  pinMode(pby, INPUT);
+  pinMode(pbg, INPUT);
+
+
+  tm.init();
+
+  // set brightness; 0-7
+  tm.set(2);
+  tm.point(1);
+  tm.display(0, mntdua);
+  tm.display(1, mnt);
+  tm.display(2, secdua);
+  tm.display(3, sec);
+}
+
+void loop()
+{
+  if (digitalRead(pbg) == HIGH)
+  {
+    tekan = 1;
+  }
+  while (tekan == 1)
+  {
+    star();
+    if (digitalRead(pby) == HIGH)
+    {
+      tekan = 2;
+    }
+    while (tekan == 2)
+    {
+      if (digitalRead(pbg) == HIGH)
+      {
+        tekan = 1;
+      }
+      if (digitalRead(pbr) == HIGH)
+      {
+        tekan = 3;
+      }
+      while (tekan == 3)
+      {
+        mereset();
+        tekan = 0;
+      }
+    }
+  }
+}
+
+void star()
+{
+  tm.display(0, mntdua);
+  tm.display(1, mnt);
+  tm.point(1);
+  tm.display(2, secdua);
+  tm.display(3, sec);
+
+  if (sec >= 9)
+  {
+    secdua ++;
+    sec = 0;
+
+  }
+  else
+  {
+    sec++;
+  }
+  if (secdua >= 6)
+  {
+    mnt ++;
+    secdua = 0;
+  }
+  if (mnt >= 9)
+  {
+    mntdua++;
+    mnt = 0;
+  }
+  for (jeda = 0; jeda < 100; jeda++)
+  {
+    tombol();
+    delay(1);
+  }
+}
+
+void mereset()
+{
+  sec = 0;
+  secdua = 0;
+  mnt = 0;
+  mntdua = 0;
+  tm.point(1);
+  tm.display(0, 0);
+  tm.display(1, 0);
+  tm.display(2, 0);
+  tm.display(3, 0);
+}
+
+void tombol()
+{
+  if (digitalRead(pbg) == HIGH)
+  {
+    digitalWrite(lg, HIGH);
+    delay(1000);
+    digitalWrite(lg, LOW);
+    delay(1000);
+    tekan = 1;
+  }
+  if (digitalRead(pby) == HIGH)
+  {
+    digitalWrite(ly, HIGH);
+    delay(1000);
+    digitalWrite(ly, LOW);
+    delay(1000);
+    tekan = 2;
+  }
+  if (digitalRead(pbr) == HIGH)
+  {
+    digitalWrite(lr, HIGH);
+    delay(1000);
+    digitalWrite(lr, LOW);
+    delay(1000);
+    tekan = 3;
+  }
+}
