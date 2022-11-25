@@ -1,0 +1,506 @@
+#include <LiquidCrystal.h>
+#define ledred 30
+#define ledyell 32
+#define ledgreen 34
+#include <DHT.h>;
+#include <Stepper.h>
+#define a 8
+#define b 7
+#define c 6
+#define d 5
+#define e 4
+#define f 3
+#define g 2
+#define DP 9 // decimal
+#define common_cathode 0
+#define common_anode 1
+int kondisi = 0;
+const int stepsPerRevolution = 48;
+Stepper myStepper(stepsPerRevolution, 51, 49, 47, 45);
+int pushA = 43;
+int pushB = 41;
+const int rs = 12, en = 11, d4 = 28, d5 = 26, d6 = 24, d7 = 22;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+int trigPin = 31;
+int echoPin = 33;
+int duration_us, distance_cm;
+#include <Keypad.h>
+const byte ROWS = 4; //4 baris
+const byte COLS = 3; //3 kolom
+char keys[ROWS][COLS] = {
+  {'1', '2', '3'},
+  {'4', '5', '6'},
+  {'7', '8', '9'},
+  {'*', '0', '#'}
+};
+#define DHTPIN 10     // what pin we're connected to
+#define DHTTYPE DHT22   // DHT 22  (AM2302)
+int chk;
+float hum;  //Stores humidity value
+float temp;
+DHT dht(DHTPIN, DHTTYPE);
+byte rowPins[ROWS] = {52, 50, 48, 46};
+byte colPins[COLS] = {44, 42, 40};
+const int buzzer = 53;
+Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
+int buttonStateA = 0;
+int buttonStateB = 0;
+char customcheckKey;
+void setup() {
+  pinMode(a, OUTPUT);
+  pinMode(b, OUTPUT);
+  pinMode(c, OUTPUT);
+  pinMode(d, OUTPUT);
+  pinMode(e, OUTPUT);
+  pinMode(f, OUTPUT);
+  pinMode(g, OUTPUT);
+  Serial.begin(9600);
+  lcd.begin(16, 2);
+  lcd.print("shift A2 !!");
+  lcd.setCursor(0, 1);
+  lcd.print("semangat ya !!");
+  delay(3000);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("press the button");
+  lcd.setCursor(0, 1);
+  lcd.print("keypad : ....  ");
+  pinMode(ledred, OUTPUT);
+  pinMode(ledyell, OUTPUT);
+  pinMode(ledgreen, OUTPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(buzzer, OUTPUT);
+  dht.begin();
+  myStepper.setSpeed(60);
+  pinMode(pushA, INPUT);
+  pinMode(pushB, INPUT);
+
+}
+void kedap1() {
+  char key = keypad.getKey();
+  // if (key == '0') {
+  Display_0();
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("press the button");
+  lcd.setCursor(0, 1);
+  lcd.print("keypad : 0");
+  digitalWrite(ledred, HIGH);
+  digitalWrite(ledyell, HIGH);
+  digitalWrite(ledgreen, HIGH);
+  delay(1000);
+  digitalWrite(ledred, LOW);
+  digitalWrite(ledyell, LOW);
+  digitalWrite(ledgreen, LOW);
+  delay(1000);
+  digitalWrite(ledred, HIGH);
+  digitalWrite(ledyell, HIGH);
+  digitalWrite(ledgreen, HIGH);
+  delay(1000);
+  digitalWrite(ledred, LOW);
+  digitalWrite(ledyell, LOW);
+  digitalWrite(ledgreen, LOW);
+  delay(1000);
+  digitalWrite(ledred, HIGH);
+  digitalWrite(ledyell, HIGH);
+  digitalWrite(ledgreen, HIGH);
+  delay(1000);
+  digitalWrite(ledred, LOW);
+  digitalWrite(ledyell, LOW);
+  digitalWrite(ledgreen, LOW);
+  delay(1000);
+}
+//}
+void kedapred() {
+  char key = keypad.getKey();
+  //if (key == '1') {
+  lcd.clear();
+  Display_1();
+  lcd.setCursor(0, 0);
+  lcd.print("press the button");
+  lcd.setCursor(0, 1);
+  lcd.print("keypad : 1");
+  digitalWrite(ledred, HIGH);
+  delay(100);
+  digitalWrite(ledred, LOW);
+}
+//}
+void kedapyell() {
+  char key = keypad.getKey();
+  //if (key == '2') {
+  Display_2();
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("press the button");
+  lcd.setCursor(0, 1);
+  lcd.print("keypad : 2");
+  digitalWrite(ledyell, HIGH);
+  delay(100);
+  digitalWrite(ledyell, LOW);
+}
+//}
+void kedapgreen() {
+  char key = keypad.getKey();
+  //if (key == '3') {
+  Display_3();
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("press the button");
+  lcd.setCursor(0, 1);
+  lcd.print("keypad : 3");
+  digitalWrite(ledgreen, HIGH);
+  delay(100);
+  digitalWrite(ledgreen, LOW);
+}
+//}
+void ultra() {
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("press the button");
+  lcd.setCursor(0, 1);
+  lcd.print("keypad : 4");
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration_us = pulseIn(echoPin, HIGH);
+  distance_cm = 0.017 * duration_us;
+
+  lcd.setCursor(0, 0);
+  lcd.print("jarak: ");
+  lcd.print(distance_cm);
+  lcd.println(" cm      ");
+  lcd.setCursor(0, 1);
+  lcd.print("keypad : 4 ");
+  delay(500);
+  if (distance_cm <= 5) {
+    digitalWrite(ledred, HIGH);
+    digitalWrite(ledgreen, LOW);
+    tone(buzzer, 1000);
+  }
+  else if (distance_cm > 5) {
+    digitalWrite(ledred, LOW);
+    digitalWrite(ledgreen, HIGH);
+    noTone(buzzer);
+  }
+
+}
+void checkKey() {
+  customcheckKey = keypad.getKey();
+  if (checkKey);
+}
+void suhu() {
+  Display_5();
+  lcd.clear();
+  hum = dht.readHumidity();
+  temp = dht.readTemperature();
+  lcd.setCursor(0, 1);
+  lcd.print("Humidity:");
+  lcd.print(hum);
+  lcd.print("% ");
+  lcd.setCursor(0, 0);
+  lcd.print("Temp:");
+  lcd.print(temp);
+  digitalWrite(ledred, HIGH);
+  digitalWrite(ledred, LOW);
+}
+void Display_0() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, HIGH);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, LOW);
+}
+
+void Display_1() {
+  digitalWrite(a, LOW);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, LOW);
+  digitalWrite(e, LOW);
+  digitalWrite(f, LOW);
+  digitalWrite(g, LOW);
+}
+void Display_2() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, LOW);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, HIGH);
+  digitalWrite(f, LOW);
+  digitalWrite(g, HIGH);
+}
+void Display_3() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, LOW);
+  digitalWrite(f, LOW);
+  digitalWrite(g, HIGH);
+}
+void Display_4() {
+  digitalWrite(a, LOW);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, LOW);
+  digitalWrite(e, LOW);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+}
+void Display_5() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, LOW);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, LOW);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+}
+void Display_6() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, LOW);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, HIGH);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+}
+void Display_7() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, LOW);
+  digitalWrite(e, LOW);
+  digitalWrite(f, LOW);
+  digitalWrite(g, LOW);
+}
+void Display_8() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, HIGH);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+}
+void Display_9() {
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, LOW);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
+}
+void stepper() {
+
+  Display_6();
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Stepper : CW/CCW");
+  lcd.setCursor(0, 1);
+  lcd.print("keypad : 6");
+}
+
+void loop() {
+  lanjut();
+
+  if (kondisi == 2)
+  {
+    lcd.clear();
+    while (kondisi == 2)
+    {
+      lcd.clear();
+      Display_1();
+      lcd.setCursor(0, 0);
+      lcd.print("press the button");
+      lcd.setCursor(0, 1);
+      lcd.print("keypad : 1");
+      delay(100);
+      lanjut();
+      digitalWrite(ledred, HIGH);
+      lanjut();
+      delay(100);
+      lanjut();
+      digitalWrite(ledred, LOW);
+      lanjut();
+    }
+  }
+  if (kondisi == 3)
+  {
+    lcd.clear();
+    while (kondisi == 3)
+    {
+      Display_2();
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("press the button");
+      lcd.setCursor(0, 1);
+      lcd.print("keypad : 2");
+      delay(100);
+      lanjut();
+      digitalWrite(ledyell, HIGH);
+      lanjut();
+      delay(100);
+      lanjut();
+      digitalWrite(ledyell, LOW);
+      lanjut();
+    }
+  }
+  if (kondisi == 4)
+  {
+    lcd.clear();
+    while (kondisi == 4)
+    {
+      Display_3();
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("press the button");
+      lcd.setCursor(0, 1);
+      lcd.print("keypad : 3");
+      delay(100);
+      lanjut();
+      digitalWrite(ledgreen, HIGH);
+      lanjut();
+      delay(100);
+      lanjut();
+      digitalWrite(ledgreen, LOW);
+      lanjut();
+    }
+  }
+  if (kondisi == 5)
+  {
+    lcd.clear();
+    while (kondisi == 5)
+    {
+      Display_4();
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("press the button");
+      lcd.setCursor(0, 1);
+      lcd.print("keypad : 4");
+      digitalWrite(trigPin, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(trigPin, LOW);
+      digitalWrite(trigPin, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(trigPin, LOW);
+      duration_us = pulseIn(echoPin, HIGH);
+      distance_cm = 0.017 * duration_us;
+lanjut();
+      lcd.setCursor(0, 0);
+      lcd.print("jarak: ");
+      lcd.print(distance_cm);
+      lcd.println(" cm      ");
+      lcd.setCursor(0, 1);
+      lcd.print("keypad : 4 ");
+      lanjut();
+      delay(500);
+      lanjut();
+      if (distance_cm <= 5) {
+        digitalWrite(ledred, HIGH);
+        digitalWrite(ledgreen, LOW);
+        tone(buzzer, 1000);
+      }
+      else if (distance_cm > 5) {
+        digitalWrite(ledred, LOW);
+        digitalWrite(ledgreen, HIGH);
+        noTone(buzzer);
+        lanjut();
+      }
+    }
+  }
+  if (kondisi == 6)
+  {
+          Display_6();
+
+    lcd.clear();
+    while (kondisi == 6)
+    {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Stepper : CW/CCW");
+      lcd.setCursor(0, 1);
+      lcd.print("keypad : 6");
+      digitalWrite(ledgreen, HIGH);
+      digitalWrite(ledgreen, LOW);
+      delay(100);
+      lanjut();
+      buttonStateA = digitalRead(pushA);
+      if (buttonStateA == HIGH) {
+         lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Stepper : CW");
+        lcd.setCursor(0, 1);
+        lcd.print("keypad : A");
+        Serial.println("CW");
+        myStepper.step(stepsPerRevolution);
+        myStepper.step(stepsPerRevolution);
+        lanjut();
+      }
+      buttonStateB = digitalRead(pushB);
+      if (buttonStateB == HIGH) {
+         lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Stepper : CCW");
+        lcd.setCursor(0, 1);
+        lcd.print("keypad : B");
+        Serial.println("CCW");
+        myStepper.step(-stepsPerRevolution);
+        myStepper.step(-stepsPerRevolution);
+        lanjut();
+      }
+      lanjut();
+
+    }
+  }
+
+
+
+}
+void lanjut()
+{
+  char key = keypad.getKey();
+  if (key)
+  {
+    if (key == '*')
+    {
+      kondisi = 1;
+    }
+    if (key == '0') // blink
+    {
+      kedap1();
+    }
+    if (key == '1') // merah on
+    {
+      kondisi = 2;
+    }
+    if (key == '2') // kuning on
+    {
+      kondisi = 3;
+    }
+    if (key == '3') // hijau on
+    {
+      kondisi = 4;
+    }
+    if (key == '4') // ultrasonik
+    {
+      kondisi = 5;
+    }
+    if (key == '6')
+    {
+      kondisi = 6;
+    }
+    if (key == 'A') // reset
+    {
+      kondisi = 0;
+    }
+  }
+}
