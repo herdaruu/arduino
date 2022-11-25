@@ -1,0 +1,75 @@
+#include <LiquidCrystal.h>
+#define ledred 6
+#define ledyell 7
+#define ledgreen 10
+const int rs = 12, en = 11, d4 = 2, d5 = 3, d6 = 4, d7 = 5;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
+
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(ledred,OUTPUT);
+  pinMode(ledyell,OUTPUT);
+  pinMode(ledgreen,OUTPUT);
+   lcd.begin(16, 2);
+ 
+}
+void kkk(){
+  
+digitalWrite(ledred,HIGH);
+digitalWrite(ledgreen,LOW);
+lcd.setCursor(0,1);
+lcd.print("Mandeg bos");
+lcd.setCursor(0,0);
+lcd.print("5 ");
+delay(1000);
+lcd.setCursor(0,0);
+lcd.print("4 ");
+delay(1000);
+lcd.setCursor(0,0);
+lcd.print("3 ");
+delay(1000);
+lcd.setCursor(0,0);
+lcd.print("2 ");
+delay(1000);
+lcd.setCursor(0,0);
+lcd.print("1 ");
+delay(1000);
+digitalWrite(ledyell,HIGH);
+digitalWrite(ledred,LOW);
+lcd.setCursor(0,1);
+lcd.print("Sabar bos kuning");
+lcd.setCursor(0,0);
+lcd.print("3 ");
+delay(1000);
+lcd.setCursor(0,0);
+lcd.print("2 ");
+delay(1000);
+lcd.setCursor(0,0);
+lcd.print("1 ");
+delay(1000);
+digitalWrite(ledyell,LOW);
+digitalWrite(ledgreen,HIGH);
+lcd.setCursor(0,1);
+lcd.print("Monggo bos          ");
+lcd.setCursor(0,0);
+lcd.print("5 ");
+delay(1000);
+lcd.setCursor(0,0);
+lcd.print("4 ");
+delay(1000);
+lcd.setCursor(0,0);
+lcd.print("3 ");
+delay(1000);
+lcd.setCursor(0,0);
+lcd.print("2 ");
+delay(1000);
+lcd.setCursor(0,0);
+lcd.print("1 ");
+delay(1000);
+setup();
+}
+void loop() {
+ kkk();
+}
