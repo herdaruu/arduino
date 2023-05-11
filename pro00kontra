@@ -1,0 +1,693 @@
+#include<iostream>
+#include<string.h>
+#include<conio.h>
+#include<fstream>
+#include<ctime>
+#include<array>
+#pragma warning (disable:4996) // waktu sekarang
+using namespace std;
+void cetak();
+//deklarasi variabel yang dibutuhkan
+string data_login[2][3] = { {"Satu","8687","Admin"},{"Dua","8888","Direktur"} };
+string username, pass, level;
+char ch;
+
+//case 2 beli
+int kd_baju[80], harga[80], qty[10], subtotal[80], total, bayar, jumlah, i;
+char jenis[8][30];
+float diskon;
+//statement pengulangan
+bool u;
+
+
+char yt;
+int pilih;
+int hargad[2] = { 200000,300000 };
+int hargaa[2] = { 100000,200000 };
+int stok[58] = { 10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10, 10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10 };
+//int i, no, pos, x, n = 0;
+
+
+
+void admin()
+{
+awal:
+	system("cls");
+	cout << " Anda login sebagai Admin" << endl;
+	cout << " ==============================================" << endl;
+	cout << ("               KETERSDIAAN BARANG             ") << endl;
+	cout << ("                      H&M                     ") << endl;
+	cout << " ==============================================" << endl;
+	cout << (" 1. Cek Stok  ") << endl;
+	cout << (" 2. Pembelian ") << endl;
+	cout << (" 3. Keluar ") << endl;
+	cout << endl;
+	cout << (" Pilih Mode = "); cin >> pilih;
+	cout << " ==============================================" << endl;
+	switch (pilih)
+	{
+	case 1:
+	{
+	masukkan:
+		system("cls");
+		cout << " ==============================================" << endl;
+		cout << ("               KETERSDIAAN BARANG             ") << endl;
+		cout << ("                      H&M                     ") << endl;
+		cout << " ==============================================" << endl;
+		cout << " JENIS PAKAIAN = " << endl;
+		cout << (" 1. Kemeja Dewasa  ") << endl;
+		cout << (" 2. Jeans Dewasa ") << endl;
+		cout << (" 3. Kaos  Dewasa ") << endl;
+		cout << (" 4. Rok Dewasa ") << endl;
+		cout << (" 5. Kemeja Anak  ") << endl;
+		cout << (" 6. Jeans Anak ") << endl;
+		cout << (" 7. Kaos  Anak ") << endl;
+		cout << (" 8. Rok Anak ") << endl;
+		cout << (" 9. Menu Awal ") << endl;
+		cout << endl;
+		cout << (" Pilih Jenis Pakaian = "); cin >> pilih;
+		cout << " ==============================================" << endl;
+		switch (pilih)
+		{
+		case 1:
+		{
+
+			cout << (" 1. Kemeja  Putih S\t\t") << stok[0] << "\t\t" << hargad[0] << endl;
+			cout << (" 2. Kemeja  Putih M\t\t") << stok[2] << "\t\t" << hargad[0] << endl;
+			cout << (" 3. Kemeja  Putih L\t\t") << stok[3] << "\t\t" << hargad[1] << endl;
+			cout << (" 4. Kemeja  Putih XL\t\t") << stok[4] << "\t\t" << hargad[1] << endl;
+			cout << (" 5. Kemeja  Hitam S\t\t") << stok[5] << "\t\t" << hargad[0] << endl;
+			cout << (" 6. Kemeja  Hitam M\t\t") << stok[6] << "\t\t" << hargad[0] << endl;
+			cout << (" 7. Kemeja  Hitam L\t\t") << stok[7] << "\t\t" << hargad[1] << endl;
+			cout << (" 8. Kemeja  Hitam XL\t\t") << stok[8] << "\t\t" << hargad[1] << endl;
+			cout << (" 9. Kemeja  Biru S\t\t") << stok[9] << "\t\t" << hargad[0] << endl;
+			cout << (" 10. Kemeja  Biru M\t\t") << stok[10] << "\t\t" << hargad[0] << endl;
+			cout << (" 11. Kemeja  Biru L\t\t") << stok[11] << "\t\t" << hargad[1] << endl;
+			cout << (" 12. Kemeja  Biru XL\t\t") << stok[12] << "\t\t" << hargad[1] << endl;
+			cout << " Lihat Stok Lain ?"; //lopping
+			cin >> yt;
+			cout << endl;
+
+			if (yt == 'Y' || yt == 'y')
+			{
+				system("cls");
+				goto masukkan;
+			}
+
+			if (yt == 'T' || yt == 't')
+			{
+				goto akhir;
+			}
+
+
+		}
+		case 2:
+		{
+			cout << (" 1. Jeans  Putih S\t\t") << stok[13] << "\t\t" << hargad[0] << endl;
+			cout << (" 2. Jeans  Putih M\t\t") << stok[14] << "\t\t" << hargad[0] << endl;
+			cout << (" 3. Jeans  Putih L\t\t") << stok[15] << "\t\t" << hargad[1] << endl;
+			cout << (" 4. Jeans  Putih XL\t\t") << stok[16] << "\t\t" << hargad[1] << endl;
+			cout << (" 5. Jeans  Hitam S\t\t") << stok[17] << "\t\t" << hargad[0] << endl;
+			cout << (" 6. Jeans  Hitam M\t\t") << stok[18] << "\t\t" << hargad[0] << endl;
+			cout << (" 7. Jeans  Hitam L\t\t") << stok[19] << "\t\t" << hargad[1] << endl;
+			cout << (" 8. Jeans  Hitam XL\t\t") << stok[20] << "\t\t" << hargad[1] << endl;
+			cout << (" 9. Jeans  Biru S\t\t") << stok[21] << "\t\t" << hargad[0] << endl;
+			cout << (" 10. Jeans  Biru M\t\t") << stok[22] << "\t\t" << hargad[0] << endl;
+			cout << (" 11. Jeans  Biru L\t\t") << stok[23] << "\t\t" << hargad[1] << endl;
+			cout << (" 12. Jeans  Biru XL\t\t") << stok[24] << "\t\t" << hargad[1] << endl;
+			cout << " Lihat Stok Lain ?"; //lopping
+			cin >> yt;
+			cout << endl;
+
+			if (yt == 'Y' || yt == 'y')
+			{
+				system("cls");
+				goto masukkan;
+			}
+
+			if (yt == 'T' || yt == 't')
+			{
+				goto akhir;
+			}
+
+		}
+		case 3:
+		{
+			cout << (" 1. Kaos Putih S\t\t") << stok[25] << "\t\t" << hargad[0] << endl;
+			cout << (" 2. Kaos  Putih M\t\t") << stok[26] << "\t\t" << hargad[0] << endl;
+			cout << (" 3. Kaos  Putih L\t\t") << stok[27] << "\t\t" << hargad[1] << endl;
+			cout << (" 4. Kaos  Putih XL\t\t") << stok[28] << "\t\t" << hargad[1] << endl;
+			cout << (" 5. Kaos  Hitam S\t\t") << stok[29] << "\t\t" << hargad[0] << endl;
+			cout << (" 6. Kaos  Hitam M\t\t") << stok[30] << "\t\t" << hargad[0] << endl;
+			cout << (" 7. Kaos  Hitam L\t\t") << stok[31] << "\t\t" << hargad[1] << endl;
+			cout << (" 8. Kaos  Hitam XL\t\t") << stok[32] << "\t\t" << hargad[1] << endl;
+			cout << (" 9. Kaos  Biru S\t\t") << stok[33] << "\t\t" << hargad[0] << endl;
+			cout << (" 10. Kaos  Biru M\t\t") << stok[34] << "\t\t" << hargad[0] << endl;
+			cout << (" 11. Kaos  Biru L\t\t") << stok[35] << "\t\t" << hargad[1] << endl;
+			cout << (" 12. Kaos  Biru XL\t\t") << stok[36] << "\t\t" << hargad[1] << endl;
+			cout << " Lihat Stok Lain ?"; //lopping
+			cin >> yt;
+			cout << endl;
+
+			if (yt == 'Y' || yt == 'y')
+			{
+				system("cls");
+				goto masukkan;
+			}
+
+			if (yt == 'T' || yt == 't')
+			{
+				goto akhir;
+			}
+
+		}
+		case 4:
+		{
+
+			cout << (" 1. Rok Putih S\t\t") << stok[37] << "\t\t" << hargaa[0] << endl;
+			cout << (" 2. Rok  Putih M\t\t") << stok[38] << "\t\t" << hargaa[0] << endl;
+			cout << (" 3. Rok  Putih L\t\t") << stok[39] << "\t\t" << hargaa[1] << endl;
+			cout << (" 4. Rok  Putih XL\t\t") << stok[40] << "\t\t" << hargaa[1] << endl;
+			cout << (" 5. Rok  Hitam S\t\t") << stok[41] << "\t\t" << hargaa[0] << endl;
+			cout << (" 6. Rok  Hitam M\t\t") << stok[42] << "\t\t" << hargaa[0] << endl;
+			cout << (" 7. Rok  Hitam L\t\t") << stok[43] << "\t\t" << hargaa[1] << endl;
+			cout << (" 8. Rok  Hitam XL\t\t") << stok[44] << "\t\t" << hargaa[1] << endl;
+			cout << (" 9. Rok  Biru S\t\t") << stok[46] << "\t\t" << hargaa[0] << endl;
+			cout << (" 10. Rok  Biru M\t\t") << stok[47] << "\t\t" << hargaa[0] << endl;
+			cout << (" 11. Rok  Biru L\t\t") << stok[49] << "\t\t" << hargaa[1] << endl;
+			cout << (" 12. Rok  Biru XL\t\t") << stok[50] << "\t\t" << hargaa[1] << endl;
+			cout << " Lihat Stok Lain ?"; //lopping
+			cin >> yt;
+			cout << endl;
+
+			if (yt == 'Y' || yt == 'y')
+			{
+				system("cls");
+				goto masukkan;
+			}
+
+			if (yt == 'T' || yt == 't')
+			{
+				goto akhir;
+			}
+		case 5:
+		{
+
+			cout << (" 1. Kemeja  Putih S\t\t") << stok[0] << "\t\t" << hargaa[0] << endl;
+			cout << (" 2. Kemeja  Putih M\t\t") << stok[2] << "\t\t" << hargaa[0] << endl;
+			cout << (" 3. Kemeja  Putih L\t\t") << stok[3] << "\t\t" << hargaa[1] << endl;
+			cout << (" 4. Kemeja  Putih XL\t\t") << stok[4] << "\t\t" << hargaa[1] << endl;
+			cout << (" 5. Kemeja  Hitam S\t\t") << stok[5] << "\t\t" << hargaa[0] << endl;
+			cout << (" 6. Kemeja  Hitam M\t\t") << stok[6] << "\t\t" << hargaa[0] << endl;
+			cout << (" 7. Kemeja  Hitam L\t\t") << stok[7] << "\t\t" << hargaa[1] << endl;
+			cout << (" 8. Kemeja  Hitam XL\t\t") << stok[8] << "\t\t" << hargaa[1] << endl;
+			cout << (" 9. Kemeja  Biru S\t\t") << stok[9] << "\t\t" << hargaa[0] << endl;
+			cout << (" 10. Kemeja  Biru M\t\t") << stok[10] << "\t\t" << hargaa[0] << endl;
+			cout << (" 11. Kemeja  Biru L\t\t") << stok[11] << "\t\t" << hargaa[1] << endl;
+			cout << (" 12. Kemeja  Biru XL\t\t") << stok[12] << "\t\t" << hargaa[1] << endl;
+			cout << " Lihat Stok Lain ?"; //lopping
+			cin >> yt;
+			cout << endl;
+
+			if (yt == 'Y' || yt == 'y')
+			{
+				system("cls");
+				goto masukkan;
+			}
+
+			if (yt == 'T' || yt == 't')
+			{
+				goto akhir;
+			}
+
+
+		}
+		case 6:
+		{
+			cout << (" 1. Jeans  Putih S\t\t") << stok[13] << "\t\t" << hargaa[0] << endl;
+			cout << (" 2. Jeans  Putih M\t\t") << stok[14] << "\t\t" << hargaa[0] << endl;
+			cout << (" 3. Jeans  Putih L\t\t") << stok[15] << "\t\t" << hargaa[1] << endl;
+			cout << (" 4. Jeans  Putih XL\t\t") << stok[16] << "\t\t" << hargaa[1] << endl;
+			cout << (" 5. Jeans  Hitam S\t\t") << stok[17] << "\t\t" << hargaa[0] << endl;
+			cout << (" 6. Jeans  Hitam M\t\t") << stok[18] << "\t\t" << hargaa[0] << endl;
+			cout << (" 7. Jeans  Hitam L\t\t") << stok[19] << "\t\t" << hargaa[1] << endl;
+			cout << (" 8. Jeans  Hitam XL\t\t") << stok[20] << "\t\t" << hargaa[1] << endl;
+			cout << (" 9. Jeans  Biru S\t\t") << stok[21] << "\t\t" << hargaa[0] << endl;
+			cout << (" 10. Jeans  Biru M\t\t") << stok[22] << "\t\t" << hargaa[0] << endl;
+			cout << (" 11. Jeans  Biru L\t\t") << stok[23] << "\t\t" << hargaa[1] << endl;
+			cout << (" 12. Jeans  Biru XL\t\t") << stok[24] << "\t\t" << hargaa[1] << endl;
+			cout << " Lihat Stok Lain ?"; //lopping
+			cin >> yt;
+			cout << endl;
+
+			if (yt == 'Y' || yt == 'y')
+			{
+				system("cls");
+				goto masukkan;
+			}
+
+			if (yt == 'T' || yt == 't')
+			{
+				goto akhir;
+			}
+
+		}
+		case 7:
+		{
+			cout << (" 1. Kaos Putih S\t\t") << stok[25] << "\t\t" << hargaa[0] << endl;
+			cout << (" 2. Kaos  Putih M\t\t") << stok[26] << "\t\t" << hargaa[0] << endl;
+			cout << (" 3. Kaos  Putih L\t\t") << stok[27] << "\t\t" << hargaa[1] << endl;
+			cout << (" 4. Kaos  Putih XL\t\t") << stok[28] << "\t\t" << hargaa[1] << endl;
+			cout << (" 5. Kaos  Hitam S\t\t") << stok[29] << "\t\t" << hargaa[0] << endl;
+			cout << (" 6. Kaos  Hitam M\t\t") << stok[30] << "\t\t" << hargaa[0] << endl;
+			cout << (" 7. Kaos  Hitam L\t\t") << stok[31] << "\t\t" << hargaa[1] << endl;
+			cout << (" 8. Kaos  Hitam XL\t\t") << stok[32] << "\t\t" << hargaa[1] << endl;
+			cout << (" 9. Kaos  Biru S\t\t") << stok[33] << "\t\t" << hargaa[0] << endl;
+			cout << (" 10. Kaos  Biru M\t\t") << stok[34] << "\t\t" << hargaa[0] << endl;
+			cout << (" 11. Kaos  Biru L\t\t") << stok[35] << "\t\t" << hargaa[1] << endl;
+			cout << (" 12. Kaos  Biru XL\t\t") << stok[36] << "\t\t" << hargaa[1] << endl;
+			cout << " Lihat Stok Lain ?"; //lopping
+			cin >> yt;
+			cout << endl;
+
+			if (yt == 'Y' || yt == 'y')
+			{
+				system("cls");
+				goto masukkan;
+			}
+
+			if (yt == 'T' || yt == 't')
+			{
+				goto akhir;
+			}
+
+		}
+		case 8:
+		{
+
+			cout << (" 1. Rok Putih S\t\t") << stok[37] << "\t\t" << hargaa[0] << endl;
+			cout << (" 2. Rok  Putih M\t\t") << stok[38] << "\t\t" << hargaa[0] << endl;
+			cout << (" 3. Rok  Putih L\t\t") << stok[39] << "\t\t" << hargaa[1] << endl;
+			cout << (" 4. Rok  Putih XL\t\t") << stok[40] << "\t\t" << hargaa[1] << endl;
+			cout << (" 5. Rok  Hitam S\t\t") << stok[41] << "\t\t" << hargaa[0] << endl;
+			cout << (" 6. Rok  Hitam M\t\t") << stok[42] << "\t\t" << hargaa[0] << endl;
+			cout << (" 7. Rok  Hitam L\t\t") << stok[43] << "\t\t" << hargaa[1] << endl;
+			cout << (" 8. Rok  Hitam XL\t\t") << stok[44] << "\t\t" << hargaa[1] << endl;
+			cout << (" 9. Rok  Biru S\t\t") << stok[46] << "\t\t" << hargaa[0] << endl;
+			cout << (" 10. Rok  Biru M\t\t") << stok[47] << "\t\t" << hargaa[0] << endl;
+			cout << (" 11. Rok  Biru L\t\t") << stok[49] << "\t\t" << hargaa[1] << endl;
+			cout << (" 12. Rok  Biru XL\t\t") << stok[50] << "\t\t" << hargaa[1] << endl;
+			cout << " Lihat Stok Lain ?"; //lopping
+			cin >> yt;
+			cout << endl;
+
+			if (yt == 'Y' || yt == 'y')
+			{
+				system("cls");
+				goto masukkan;
+			}
+
+			if (yt == 'T' || yt == 't')
+			{
+				goto akhir;
+			}
+
+		}
+		}
+		case 9:
+
+		{
+			cout << " Kembali Ke Menu Utama ?"; //lopping
+			cin >> yt;
+			cout << endl;
+
+			if (yt == 'Y' || yt == 'y')
+			{
+				system("cls");
+				goto awal;
+			}
+
+			if (yt == 'T' || yt == 't')
+			{
+				goto akhir;
+			}
+		akhir:
+			cin.get();
+			break;
+		}
+		}
+	}
+	case 2:
+	{
+		system("cls");
+
+		//reset total saat diulang
+		total = 0;
+
+		//template awal
+		cout << " \n============================================" << endl;
+		cout << (" |             KETERSDIAAN BARANG            | ") << endl;
+		cout << (" |                    H&M                    | ") << endl;
+		cout << " \n=============================================" << endl;
+		cout << "\n|Daftar jenis baju yang dijual :             |";
+		cout << "\n|   1. Kemeja Dewasa Putih S                 |";
+		cout << "\n|   2. Kemeja Dewasa Putih M                 |";
+		cout << "\n|   3. Kemeja Dewasa Putih L                 |";
+		cout << "\n|   4. Kemeja Dewasa Putih XL                |";
+		cout << "\n|   5. Kemeja Dewasa Hitam S                 |";
+		cout << "\n|   6. Kemeja Dewasa Hitam M                 |";
+		cout << "\n|   7. Kemeja Dewasa Hitam L                 |";
+		cout << "\n|   8. Kemeja Dewasa Hitam XL                |";
+		cout << "\n|   9. Kemeja Dewasa Biru S                  |";
+		cout << "\n|   10. Kemeja Dewasa Biru M                 |";
+		cout << "\n|   11. Kemeja Dewasa Biru L                 |";
+		cout << "\n|   12. Kemeja Dewasa Biru XL                |";
+		cout << "\n|   13. Jeans Dewasa Putih S                 |";
+		cout << "\n|   14. Jeans Dewasa Putih M                 |";
+		cout << "\n|   15. Jeans Dewasa Putih L                 |";
+		cout << "\n|   16. Jeans Dewasa Putih XL                |";
+		cout << "\n|   17. Jeans Dewasa Hitam S                 |";
+		cout << "\n|   18. Jeans Dewasa Hitam M                 |";
+		cout << "\n|   19. Jeans Dewasa Hitam L                 |";
+		cout << "\n|   20. Jeans Dewasa Hitam XL                |";
+		cout << "\n|   21. Jeans Dewasa Biru S                  |";
+		cout << "\n|   22. Jeans Dewasa Biru M                  |";
+		cout << "\n|   23. Jeans Dewasa Biru L                  |";
+		cout << "\n|   24. Jeans Dewasa Biru XL                 |";
+		cout << "\n|   25. Kaos Dewasa Putih S                  |";
+		cout << "\n|   26. Kaos Dewasa Putih M                  |";
+		cout << "\n|   27. Kaos Dewasa Putih L                  |";
+		cout << "\n|   28. Kaos Dewasa Putih XL                 |";
+		cout << "\n|   29. Kaos Dewasa Hitam S                  |";
+		cout << "\n|   30. Kaos Dewasa Hitam M                  |";
+		cout << "\n|   31. Kaos Dewasa Hitam L                  |";
+		cout << "\n|   32. Kaos Dewasa Hitam XL                 |";
+		cout << "\n|   33. Kaos Dewasa Biru S                   |";
+		cout << "\n|   34. Kaos Dewasa Biru M                   |";
+		cout << "\n|   35. Kaos Dewasa Biru L                   |";
+		cout << "\n|   36. Kaos Dewasa Biru XL                  |";
+		cout << "\n|   37. Kemeja Anak Putih S                  |";
+		cout << "\n|   38. Kemeja Anak Putih M                  |";
+		cout << "\n|   39. Kemeja Anak Putih L                  |";
+		cout << "\n|   40. Kemeja Anak Putih XL                 |";
+		cout << "\n|   41. Kemeja Anak Hitam S                  |";
+		cout << "\n|   42. Kemeja Anak Hitam M                  |";
+		cout << "\n|   43. Kemeja Anak Hitam L                  |";
+		cout << "\n|   44. Kemeja Anak Hitam XL                 |";
+		cout << "\n|   45. Kemeja Anak Biru S                   |";
+		cout << "\n|   46. Kemeja Anak Biru M                   |";
+		cout << "\n|   47. Kemeja Anak Biru L                   |";
+		cout << "\n|   48. Kemeja Anak Biru XL                  |";
+		cout << "\n|   49. Jeans Anak Putih S                   |";
+		cout << "\n|   50. Jeans Anak Putih M                   |";
+		cout << "\n|   51. Jeans Anak Putih L                   |";
+		cout << "\n|   52. Jeans Anak Putih XL                  |";
+		cout << "\n|   53. Jeans Anak Hitam S                   |";
+		cout << "\n|   54. Jeans Anak Hitam M                   |";
+		cout << "\n|   55. Jeans Anak Hitam L                   |";
+		cout << "\n|   56. Jeans Anak Hitam XL                  |";
+		cout << "\n|   57. Jeans Anak Biru S                    |";
+		cout << "\n|   58. Jeans Anak Biru M                    |";
+		cout << "\n|   59. Jeans Anak Biru L                    |";
+		cout << "\n|   60. Jeans Anak Biru XL                   |";
+		cout << "\n|   61. Kaos Anak Putih S                    |";
+		cout << "\n|   62. Kaos Anak Putih M                    |";
+		cout << "\n|   63. Kaos Anak Putih L                    |";
+		cout << "\n|   64. Kaos Anak Putih XL                   |";
+		cout << "\n|   65. Kaos Anak Hitam S                    |";
+		cout << "\n|   66. Kaos Anak Hitam M                    |";
+		cout << "\n|   67. Kaos Anak Hitam L                    |";
+		cout << "\n|   68. Kaos Anak Hitam XL                   |";
+		cout << "\n|   69. Kaos Anak Biru S                     |";
+		cout << "\n|   70. Kaos Anak Biru M                     |";
+		cout << "\n|   71. Kaos Anak Biru L                     |";
+		cout << "\n|   72. Kaos Anak Biru XL                    |";
+		cout << "\n|   73. Kembali ke Menu Awal                 |";
+		cout << "\n|________________|";
+
+		//input jumlah jenis baju yg ingin dibeli
+		cout << "\n\n Masukan Total Banyak Item :\t\t :"; cin >> jumlah;
+
+		//fungsi perulangan
+		for (i = 0; i < jumlah; i++) {
+
+			//memilih jenis baju berulang sesuai jumlah
+			cout << "\n Pilih jenis Item ke " << i + 1 << " <1/2/3/4>\t :"; cin >> kd_baju[i];
+
+			//mengganti kode baju menjadi jenis baju dan harga berdasarkan urutan
+			switch (kd_baju[i]) {
+			case 1: strcpy(jenis[i], " Kemeja Dewasa Putih S"); harga[i] = 300000; break;
+			case 2: strcpy(jenis[i], " Kemeja Dewasa Putih M"); harga[i] = 300000; break;
+			case 3: strcpy(jenis[i], " Kemeja Dewasa Putih L"); harga[i] = 300000; break;
+			case 4: strcpy(jenis[i], " Kemeja Dewasa Putih XL"); harga[i] = 300000; break;
+			case 5: strcpy(jenis[i], " Kemeja Dewasa Hitam S"); harga[i] = 300000; break;
+			case 6: strcpy(jenis[i], " Kemeja Dewasa Hitam M"); harga[i] = 300000; break;
+			case 7: strcpy(jenis[i], " Kemeja Dewasa Hitam L"); harga[i] = 350000; break;
+			case 8: strcpy(jenis[i], " Kemeja Dewasa Hitam XL"); harga[i] = 350000; break;
+			case 9: strcpy(jenis[i], " Kemeja Dewasa Biru S"); harga[i] = 300000; break;
+			case 10: strcpy(jenis[i], " Kemeja Dewasa Biru M"); harga[i] = 300000; break;
+			case 11: strcpy(jenis[i], " Kemeja Dewasa Biru L"); harga[i] = 350000; break;
+			case 12: strcpy(jenis[i], " Kemeja Dewasa Biru XL"); harga[i] = 350000; break;
+			case 13: strcpy(jenis[i], " Jeans Dewasa Putih S"); harga[i] = 300000; break;
+			case 14: strcpy(jenis[i], " Jeans Dewasa Putih M"); harga[i] = 300000; break;
+			case 15: strcpy(jenis[i], " Jeans Dewasa Putih L"); harga[i] = 300000; break;
+			case 16: strcpy(jenis[i], " Jeans Dewasa Putih XL"); harga[i] = 300000; break;
+			case 17: strcpy(jenis[i], " Jeans Dewasa Hitam S"); harga[i] = 300000; break;
+			case 18: strcpy(jenis[i], " Jeans Dewasa Hitam M"); harga[i] = 300000; break;
+			case 19: strcpy(jenis[i], " Jeans Dewasa Hitam L"); harga[i] = 350000; break;
+			case 20: strcpy(jenis[i], " Jeans Dewasa Hitam XL"); harga[i] = 350000; break;
+			case 21: strcpy(jenis[i], " Jeans Dewasa Biru S"); harga[i] = 300000; break;
+			case 22: strcpy(jenis[i], " Jeans Dewasa Biru M"); harga[i] = 300000; break;
+			case 23: strcpy(jenis[i], " Jeans Dewasa Biru L"); harga[i] = 350000; break;
+			case 24: strcpy(jenis[i], " Jeans Dewasa Biru XL"); harga[i] = 350000; break;
+			case 25: strcpy(jenis[i], " Kaos Dewasa Putih S"); harga[i] = 300000; break;
+			case 26: strcpy(jenis[i], " Kaos Dewasa Putih M"); harga[i] = 300000; break;
+			case 27: strcpy(jenis[i], " Kaos Dewasa Putih L"); harga[i] = 300000; break;
+			case 28: strcpy(jenis[i], " Kaos Dewasa Putih XL"); harga[i] = 300000; break;
+			case 29: strcpy(jenis[i], " Kaos Dewasa Hitam S"); harga[i] = 300000; break;
+			case 30: strcpy(jenis[i], " Kaos Dewasa Hitam M"); harga[i] = 300000; break;
+			case 31: strcpy(jenis[i], " Kaos Dewasa Hitam L"); harga[i] = 350000; break;
+			case 32: strcpy(jenis[i], " Kaos Dewasa Hitam XL"); harga[i] = 350000; break;
+			case 33: strcpy(jenis[i], " Kaos Dewasa Biru S"); harga[i] = 300000; break;
+			case 34: strcpy(jenis[i], " Kaos Dewasa Biru M"); harga[i] = 300000; break;
+			case 35: strcpy(jenis[i], " Kaos Dewasa Biru L"); harga[i] = 350000; break;
+			case 36: strcpy(jenis[i], " Kaos Dewasa Biru XL"); harga[i] = 350000; break;
+			case 37: strcpy(jenis[i], " Kemeja Anak Putih S"); harga[i] = 300000; break;
+			case 38: strcpy(jenis[i], " Kemeja Anak Putih M"); harga[i] = 300000; break;
+			case 39: strcpy(jenis[i], " Kemeja Anak Putih L"); harga[i] = 300000; break;
+			case 40: strcpy(jenis[i], " Kemeja Anak Putih XL"); harga[i] = 300000; break;
+			case 41: strcpy(jenis[i], " Kemeja Anak Hitam S"); harga[i] = 300000; break;
+			case 42: strcpy(jenis[i], " Kemeja Anak Hitam M"); harga[i] = 300000; break;
+			case 43: strcpy(jenis[i], " Kemeja Anak Hitam L"); harga[i] = 350000; break;
+			case 44: strcpy(jenis[i], " Kemeja Anak Hitam XL"); harga[i] = 350000; break;
+			case 45: strcpy(jenis[i], " Kemeja Anak Biru S"); harga[i] = 300000; break;
+			case 46: strcpy(jenis[i], " Kemeja Anak Biru M"); harga[i] = 300000; break;
+			case 47: strcpy(jenis[i], " Kemeja Anak Biru L"); harga[i] = 350000; break;
+			case 48: strcpy(jenis[i], " Kemeja Anak Biru XL"); harga[i] = 350000; break;
+			case 49: strcpy(jenis[i], " Jeans Anak Putih S"); harga[i] = 300000; break;
+			case 50: strcpy(jenis[i], " Jeans Anak Putih M"); harga[i] = 300000; break;
+			case 51: strcpy(jenis[i], " Jeans Anak Putih L"); harga[i] = 300000; break;
+			case 52: strcpy(jenis[i], " Jeans Anak Putih XL"); harga[i] = 300000; break;
+			case 53: strcpy(jenis[i], " Jeans Anak Hitam S"); harga[i] = 300000; break;
+			case 54: strcpy(jenis[i], " Jeans Anak Hitam M"); harga[i] = 300000; break;
+			case 55: strcpy(jenis[i], " Jeans Anak Hitam L"); harga[i] = 350000; break;
+			case 56: strcpy(jenis[i], " Jeans Anak Hitam XL"); harga[i] = 350000; break;
+			case 57: strcpy(jenis[i], " Jeans Anak Biru S"); harga[i] = 300000; break;
+			case 58: strcpy(jenis[i], " Jeans Anak Biru M"); harga[i] = 300000; break;
+			case 59: strcpy(jenis[i], " Jeans Anak Biru L"); harga[i] = 350000; break;
+			case 60: strcpy(jenis[i], " Jeans Anak Biru XL"); harga[i] = 350000; break;
+			case 61: strcpy(jenis[i], " Kaos Anak Putih S"); harga[i] = 300000; break;
+			case 62: strcpy(jenis[i], " Kaos Anak Putih M"); harga[i] = 300000; break;
+			case 63: strcpy(jenis[i], " Kaos Anak Putih L"); harga[i] = 300000; break;
+			case 64: strcpy(jenis[i], " Kaos Anak Putih XL"); harga[i] = 300000; break;
+			case 65: strcpy(jenis[i], " Kaos Anak Hitam S"); harga[i] = 300000; break;
+			case 66: strcpy(jenis[i], " Kaos Anak Hitam M"); harga[i] = 300000; break;
+			case 67: strcpy(jenis[i], " Kaos Anak Hitam L"); harga[i] = 350000; break;
+			case 68: strcpy(jenis[i], " Kaos Anak Hitam XL"); harga[i] = 350000; break;
+			case 69: strcpy(jenis[i], " Kaos Anak Biru S"); harga[i] = 300000; break;
+			case 70: strcpy(jenis[i], " Kaos Anak Biru M"); harga[i] = 300000; break;
+			case 71: strcpy(jenis[i], " Kaos Anak Biru L"); harga[i] = 350000; break;
+			case 72: strcpy(jenis[i], " Kaos Anak Biru XL"); harga[i] = 350000; break;
+			case 73: goto masukkan; break;
+
+			default: strcpy(jenis[i], "Tidak Ditemukan"); harga[i] = 0; break;
+			}
+
+			cetak();
+
+		}
+
+	}
+
+
+	case 3:
+	{
+		goto tamat;
+	}
+	}
+
+	cout << " Kembali Ke Menu Utama ?"; //lopping
+	cin >> yt;
+	cout << endl;
+
+	if (yt == 'Y' || yt == 'y')
+	{
+		system("cls");
+		goto masukkan;
+	}
+
+	if (yt == 'T' || yt == 't')
+	{
+		goto tamat;
+	}
+tamat:
+	cin.get();
+	return;
+
+}
+
+
+
+void cetak()
+{
+
+	ofstream myfile("stok.txt", ios::app);
+	if (myfile.is_open())
+	{
+		// memilih quantity setiap jenis baju yang dibeli
+
+		cout << "\n\n Banyak Jenis Yang dibeli   :"; cin >> qty[i];
+		//menghitung diskon 35% jika pembelian diatas 2jt
+		if (total >= 2000000)
+		{
+			diskon = 0;
+		}
+		else { diskon = 0; }
+
+		myfile << "==========================================================" << endl;
+		myfile << "==                           H&M                        ==" << endl;
+		myfile << "==========================================================" << endl;
+		myfile << ("             JL. ADI SUCIPTO, COLOMADU, KARANGANYAR      ") << endl;
+
+		time_t ttime = time(0);
+		tm* local_time = localtime(&ttime);
+
+		myfile << "                     Tanggal : " << local_time->tm_mday << "/" << 1 + local_time->tm_mon << "/" << 1900 + local_time->tm_year << endl;
+		myfile << "                        Waktu : " << local_time->tm_hour << ":";
+		myfile << local_time->tm_min << ":";
+		myfile << 1 + local_time->tm_sec << endl;
+		myfile << "=============================================" << endl;
+		myfile << " Kode Pembelian   = " << endl;
+
+		//template awal data pembelian
+		myfile << "\n***************";
+		myfile << "\n            DESKRIPSI PEMBELIAN          ";
+		myfile << "\n***************";
+		//menghitung subtotal dan total
+		subtotal[i] = qty[i] * harga[i];
+		total += subtotal[i];
+		//mencetak data pembelian diulang
+		for (i = 0; i < jumlah; i++) {
+			cout << "\n Jenis\t\t = " << jenis[i];
+			cout << "\n Harga\t\t = " << harga[i];
+			cout << "\n Jumlah\t\t = " << qty[i];
+			cout << "\n Subtotal\t = " << subtotal[i];
+			cout << "\n\n-------------------------------------------";
+		}
+		//mencetak total akhir dan diskon
+		myfile << "\n Total\t\t = " << total;
+		myfile << "\n Diskon\t\t = " << diskon;
+
+		//menghitung total akhir = total-diskon
+		total = diskon;
+
+		//melakukan pembayaran
+		myfile << "\n Bayar\t\t = " << total;
+		myfile << "\n Pembayaran\t = "; cin >> bayar;
+		myfile << " Kembalian\t = " << bayar - total;
+		myfile << "\n\n===========================================";
+		myfile << "\n*Terimakasih telah berbelanja ditoko kami*";
+		myfile << "===============================================" << endl;
+	}
+	else
+	{
+		cout << "Gagal membuka file";
+	}
+}
+
+
+
+int main() {
+login:
+	//Membuat tampilan output login
+	system("color E5");
+	system("cls");
+	cout << "==========================================================" << endl;
+	cout << "==                           H&M                        ==" << endl;
+	cout << "==========================================================" << endl;
+	cout << ("             JL. ADI SUCIPTO, COLOMADU, KARANGANYAR      ") << endl;
+	time_t ttime = time(0);
+	tm* local_time = localtime(&ttime);
+	cout << "                     Tanggal : " << local_time->tm_mday << "/" << 1 + local_time->tm_mon << "/" << 1900 + local_time->tm_year << endl;
+	cout << "                        Waktu : " << local_time->tm_hour << ":";
+	cout << local_time->tm_min << ":";
+	cout << 1 + local_time->tm_sec << endl;
+	cout << "==========================================================" << endl;;
+	//Tampilan untuk menginput data
+//Tampilan untuk menginput data
+	cout << "\nUsername : "; cin >> username;
+	cout << "\nPassword : "; ch = _getch();
+	while (ch != 13) {
+		pass.push_back(ch);
+		cout << '*';
+		ch = _getch();
+	}
+
+	//Perulangan untuk mengecek apakah data yang diinput sudah sesuai dengan data yang tersimpan
+	for (int i = 0; i <= 1; i++) {
+		//Cek inputan dengan data yang disimpan
+		if (data_login[i][0] == username && data_login[i][1] == pass) {
+			//Menyimpan data dari array ke variabel level
+			level = data_login[i][2];
+			break;
+		}
+	}
+	cout << "\n\n";
+
+	//Percabangan untuk menentukan output berdasarkan level
+	if (level == "Admin")
+	{
+		admin();
+	}
+	else if (level == "Direktur")
+	{
+		cout << "===========================" << endl;;
+		cout << " Anda login sebagi Direktur" << endl;;
+		cout << " maaf ya mba belum selesai:(" << endl;;;
+		cout << "===========================" << endl;;
+	}
+
+	else
+	{
+		cout << "Level tidak ditemukan";
+	}
+
+	cout << endl;
+	cout << " Kembali Ke Menu Utama ?"; //lopping
+	cin >> yt;
+	cout << endl;
+
+	if (yt == 'Y' || yt == 'y')
+	{
+		system("cls");
+		goto login;
+	}
+
+	if (yt == 'T' || yt == 't')
+	{
+		goto akhir;
+	}
+akhir:
+	cin.get();
+	return 0;
+}
