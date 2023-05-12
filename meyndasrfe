@@ -1,0 +1,590 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+#include<cmath>
+#include<string>
+#include<algorithm>
+#include<Windows.h>
+#include<stdio.h>
+#include <conio.h>
+#include <fstream>
+#include <ctime>
+using namespace std;
+const int TABLE_COUNT = 10;
+const int MAX_TABLES = 10;
+bool tables[TABLE_COUNT] = { true, true, true, true, true, true, true, true, true, true };
+int kode_hari_beli;
+int pilihanDiadmin;
+int MenuAdmin, pilih_menu_direc;
+string adminn, Direcc;
+int passwordadmin, passworddirec;
+char yt;
+int zzz;
+int i;
+int buyAnakTiketJumat;
+int buyDewasaTiketJumat;
+int buyAnakTiketSabtu;
+int buyDewasaTiketSabtu;
+int buyAnakTiketMinggu;
+int buyDewasaTiketMinggu;
+int HargaJumat;
+int HargaSabtu;
+int HargaMinggu;
+int jumlahtiketDibeli[3];
+int total_Untung[3];
+int total_tiket_terjual;
+int TotTiketanak[3];
+int TotTiketDewasa[3];
+int tiketanakSold;
+int TiketDewasaSold;
+int kondisi, saat;
+int isi_filem;
+int jam, menit, detik, hari, bulan, tahun;
+void displayTableStatus();
+struct bioskopp
+{
+    string nama_film;
+    int hargaTiketJumattt;
+    int hargaTiketSabtuuu;
+    int hargaTiketMingguuu;
+    int felm;
+    int tukutik;
+    int stoktik[3] = { 10, 10, 10 };
+}
+indekfelm[3];
+//fungsi tampilkan pesan selamat datang
+void delay(void) {
+    int delay;
+    delay = 1;
+    while (delay < 29000000) {
+        delay++;
+    }
+}
+void pesan_ane(void) {
+    int i, panjg_char;
+    char pesan[] = { 'S','e','l','a','m','a','t',' ','D','a','t','a','n','g','\0' };
+    i = 0; panjg_char = strlen(pesan);
+    cout << "\n\t ";
+    while (i < panjg_char) {
+        cout << pesan[i];
+        delay();
+        i++;
+    }
+    pesan[i] = 0;
+    cout << endl;
+}
+void displayTableStatus()
+{
+    cout << "Available Seat Tables:" << endl;
+    cout << "#| FILM1\t    | FILM2 \t        | FILM3 \t        | # " << endl;
+    for (int i = 0; i < TABLE_COUNT; i++) {
+
+        cout << "Seats " << (i + 1) << ": " << (tables[i] ? "KOSONG" : "BOOKED\t");
+        cout << "       Seats " << (i + 1) << ": " << (tables[i] ? "KOSONG" : " BOOKED\t");
+        cout << "       Seats " << (i + 1) << ": " << (tables[i] ? "KOSONG" : " BOOKED") << endl;
+    }
+}
+void pesan(void) {
+    int i, panjg_char;
+    char pesan[] = { 'S','i','l','a','h','k','a','n',' ','L','o','g','i','n','\0' };
+    i = 0; panjg_char = strlen(pesan);
+    cout << "\n\t\t ";
+    while (i < panjg_char) {
+        cout << pesan[i];
+        delay();
+        i++;
+    }
+    pesan[i] = 0;
+    cout << endl;
+}
+void pesann(void) {
+    int i, panjg_char;
+    char pesan[] = { 'D','a','h','u','l','u','!','!','\0' };
+    i = 0; panjg_char = strlen(pesan);
+    cout << "\n\t\t\t ";
+    while (i < panjg_char) {
+        cout << pesan[i];
+        delay();
+        i++;
+    }
+    pesan[i] = 0;
+    cout << endl << endl;
+}
+void waktu()
+{
+    time_t ttime = time(0);
+    tm* local_time = localtime(&ttime);
+
+    jam = local_time->tm_hour;
+    menit = local_time->tm_min;
+    detik = local_time->tm_sec;
+    hari = local_time->tm_mday;
+    bulan = 1 + local_time->tm_mon;
+    tahun = 1900 + local_time->tm_year;
+}
+void garis(void) {
+
+    int i;
+
+    for (i = 1; i <= 22; i++) {
+
+        cout << "= ";
+
+        delay();
+
+    }
+    cout << endl;
+}
+int main()
+{
+    system("cls");
+    system("color f0");
+    garis();
+    system("color f1");
+    pesan_ane();
+    system("color f2");
+    pesan();
+    system("color f3");
+    pesann();
+    system("color f0");
+    garis();
+    Sleep(1000);
+    system("cls");
+startttt:
+    cout << endl;
+    system("color f3");
+    cout << "#================================================#" << endl;
+    cout << "#================================================#" << endl;
+    cout << "#                  CINEMA CGV                    # " << endl;
+    cout << "#================================================#" << endl;
+    cout << "#================================================#" << endl << endl;
+    cout << "1.ADMIN";
+    cout << " 2.DIREKTUR" << endl;
+    cout << "Masuk sebagai : ";
+    cin >> pilihanDiadmin;
+    if (pilihanDiadmin == 1)
+    {
+    masukkan:
+        system("cls");
+        system("color F0");
+        cout << "#================================================#" << endl;
+        cout << "#================================================#" << endl;
+        cout << "#                  LOGIN ADMIN                   # " << endl;
+        cout << "#================================================#" << endl;
+        cout << "#================================================#" << endl;
+        cout << "Input user : ";
+        cin >> adminn;
+        cout << "Input Passkey : ";
+        cin >> passwordadmin;
+        if (adminn == "admin" && passwordadmin == 1111)
+        {
+        menu_buat_admin:
+            system("cls");
+            system("color F2");
+            cout << "############################### " << endl;
+            cout << "1. Beli Tiket" << endl;
+            cout << "############################### " << endl;
+            cout << "2. Seat yang tersedia" << endl;
+            cout << "############################### " << endl;
+            cout << "3. Memasukkan FILM dan HARGA" << endl;
+            cout << "############################### " << endl;
+            cout << "4. Cetak Nota " << endl;
+            cout << "############################### " << endl;
+            cout << "5.Back " << endl;
+            cout << "############################### " << endl;
+
+
+            cout << "Pilihan Anda : ";
+            cin >> MenuAdmin;
+            if (MenuAdmin == 1)
+            {
+            pilihfilem:
+                system("cls");
+                system("color F0");
+                cout << "#================================================#" << endl;
+                cout << "#=============      BELI TIKET     ============# " << endl;
+                cout << "#================================================#" << endl;
+                cout << "filem  1  " << endl;
+                cout << "filem  2  " << endl;
+                cout << "filem  3  " << endl;
+                cout << "Input filem: ";
+                cin >> isi_filem;
+                for (i = 0; i < zzz; i++)
+                {
+                    if (isi_filem == indekfelm[i].felm) {
+                        saat = 1;
+                        break;
+                    }
+                    else
+                    {
+
+                        cout << "filem Tidak Ada   " << endl;
+                        cin.get();
+                        goto pilihfilem;
+
+                    }
+                }
+                if (saat == 1)
+                {
+                belilagi:
+                    system("cls");
+                    system("color F2");
+                    cout << "#================================================#" << endl;
+                    cout << "NAMA FILM            : " << indekfelm[i].nama_film << endl;
+                    cout << "HARGA  JUMAT   : Rp" << indekfelm[i].hargaTiketJumattt << endl;
+                    cout << "HARGA  SABTU   : Rp" << indekfelm[i].hargaTiketSabtuuu << endl;
+                    cout << "HARGA  MINGGU  : Rp" << indekfelm[i].hargaTiketMingguuu << endl << endl;
+                    cout << "#=============       PILIH HARI      ============# " << endl;
+                    cout << "1. Jumat" << endl;
+                    cout << "2. Sabtu" << endl;
+                    cout << "3. Minggu" << endl;
+                    cout << "Masukkan Film : ";
+                    cin >> kode_hari_beli;
+                    if (kode_hari_beli == 1)
+                    {
+                        cout << "Jumlah Tiket Anak: ";
+                        cin >> buyAnakTiketJumat; cout << endl;
+                        cout << "Jumlah Tiket Dewasa : ";
+                        cin >> buyDewasaTiketJumat; cout << endl;
+                        jumlahtiketDibeli[0] = jumlahtiketDibeli[0] + (buyAnakTiketJumat + buyDewasaTiketJumat);
+                        if (jumlahtiketDibeli[0] > indekfelm[i].stoktik[0])
+                        {
+                            cout << "MAAF  TIKET TIDAK MENCUKUPI " << endl;
+                            cout << "TEKAN Y UNTUK INPUT LAGI ";
+                            jumlahtiketDibeli[0] = jumlahtiketDibeli[0] + (buyAnakTiketJumat + buyDewasaTiketJumat);
+                            cin >> yt;
+                            if (yt == 'Y' || yt == 'y') {
+                                goto belilagi;
+                            }
+                        }
+                        else
+                        {
+                            HargaJumat = (indekfelm[i].hargaTiketJumattt * buyAnakTiketJumat * 0.8) + (indekfelm[i].hargaTiketJumattt * buyDewasaTiketJumat);
+                            total_Untung[0] = total_Untung[0] + HargaJumat;
+                            cout << "TOTAL HARGA : Rp" << HargaJumat << endl;
+                            indekfelm[i].stoktik[0] = indekfelm[i].stoktik[0] - (buyAnakTiketJumat + buyDewasaTiketJumat);
+                            TotTiketanak[0] = TotTiketanak[0] + buyAnakTiketJumat;
+                            TotTiketDewasa[0] = TotTiketDewasa[0] + buyDewasaTiketJumat;
+                            cout << endl;
+                            cout << "BELI LAGI ?? (Y/T) ?";
+                            cin >> yt;
+                            if (yt == 'Y' || yt == 'y') {
+                                goto belilagi;
+                            }
+                            if (yt == 'T' || yt == 't') {
+                                goto menu_buat_admin;
+                            }
+                        }
+                    }
+                    if (kode_hari_beli == 2)
+                    {
+                        cout << "INPUT JUMLAH TIKET ANAK-ANAK : "; cin >> buyAnakTiketSabtu; cout << endl;
+                        cout << "INPUT JUMLAH TIKET DEWASA : "; cin >> buyDewasaTiketSabtu; cout << endl;
+                        jumlahtiketDibeli[1] = jumlahtiketDibeli[1] + (buyAnakTiketSabtu + buyDewasaTiketSabtu);
+                        if (jumlahtiketDibeli[1] > indekfelm[i].stoktik[1])
+                        {
+                            cout << "MAAF STOCK TIKET TIDAK MENCUKUPI " << endl;
+                            cout << "TEKAN (Y) UNTUK INPUT LAGI";
+                            jumlahtiketDibeli[1] = jumlahtiketDibeli[1] - (buyAnakTiketSabtu + buyDewasaTiketSabtu);
+                            cin >> yt;
+                            if (yt == 'Y' || yt == 'y') {
+                                goto belilagi;
+                            }
+                        }
+                        else
+                        {
+                            HargaSabtu = (indekfelm[i].hargaTiketSabtuuu * buyAnakTiketSabtu * 0.8) + (indekfelm[i].hargaTiketSabtuuu * buyDewasaTiketSabtu);
+                            total_Untung[1] = total_Untung[1] + HargaSabtu;
+                            cout << "TOTAL HARGA : Rp" << HargaSabtu << endl;
+                            indekfelm[i].stoktik[1] = indekfelm[i].stoktik[1] - (buyAnakTiketSabtu + buyDewasaTiketSabtu);
+                            TotTiketanak[1] = TotTiketanak[1] + buyAnakTiketSabtu;
+                            TotTiketDewasa[1] = TotTiketDewasa[1] + buyDewasaTiketSabtu;
+                            cout << "BELI LAGI ?? (Y/T) ?";
+                            cin >> yt;
+                            if (yt == 'Y' || yt == 'y') {
+                                goto belilagi;
+                            }
+                            if (yt == 'T' || yt == 't') {
+                                goto menu_buat_admin;
+                            }
+                        }
+                    }
+                    if (kode_hari_beli == 3)
+                    {
+                        cout << "INPUT JUMLAH TIKET ANAK-ANAK : "; cin >> buyAnakTiketMinggu; cout << endl;
+                        cout << "INPUT JUMLAH TIKET DEWASA : "; cin >> buyDewasaTiketMinggu; cout << endl;
+                        jumlahtiketDibeli[2] = jumlahtiketDibeli[2] + (buyAnakTiketMinggu + buyDewasaTiketMinggu);
+                        if (jumlahtiketDibeli[2] > indekfelm[i].stoktik[2])
+                        {
+                            cout << "MAAF STOCK TIKET TIDAK MENCUKUPI " << endl;
+                            cout << "TEKAN (Y) UNTUK INPUT LAGI";
+                            jumlahtiketDibeli[2] = jumlahtiketDibeli[2] + (buyAnakTiketMinggu + buyDewasaTiketMinggu);
+                            cin >> yt;
+                            if (yt == 'Y' || yt == 'y') {
+                                goto belilagi;
+                            }
+                        }
+                        else
+                        {
+                            HargaMinggu = (indekfelm[i].hargaTiketMingguuu * buyAnakTiketMinggu * 0.8) + (indekfelm[i].hargaTiketMingguuu * buyDewasaTiketMinggu);
+                            total_Untung[2] = total_Untung[2] + HargaMinggu;
+                            cout << "TOTAL HARGA : Rp" << HargaMinggu << endl;
+                            indekfelm[i].stoktik[2] = indekfelm[i].stoktik[2] - (buyAnakTiketMinggu + buyDewasaTiketMinggu);
+                            TotTiketanak[2] = TotTiketanak[2] + buyAnakTiketMinggu;
+                            TotTiketDewasa[2] = TotTiketDewasa[2] + buyDewasaTiketMinggu;
+                            cout << "Lagi ?? (Y) / Bayar (T)?";
+                            cin >> yt;
+                            if (yt == 'Y' || yt == 'y') {
+                                goto belilagi;
+                            }
+                            if (yt == 'T' || yt == 't') {
+                                goto menu_buat_admin;
+                            }
+                        }
+                    }
+                }
+            }
+            if (MenuAdmin == 10)
+            {
+                system("cls");
+                system("color F2");
+                cout << "#================================================#" << endl;
+                cout << "#==============   DAFTAR FILM   =================# " << endl;
+                cout << "#================================================#" << endl;
+                cout << "#| Film\t| Jumat  \t|  Sabtu \t|  Minggu |# " << endl;
+                for (i = 0; i < zzz; i++)
+                {
+                    cout << "" << i + 1 << "   |" << indekfelm[i].nama_film << "\t|      \t" << indekfelm[i].hargaTiketJumattt << "\t|      \t" << indekfelm[i].hargaTiketSabtuuu << "\t|      \t" << indekfelm[i].hargaTiketMingguuu << endl;
+                }
+                cout << endl;
+                cout << "Tekan y for back ?";
+                cin >> yt;
+                if (yt == 'Y' || yt == 'y') {
+                    goto menu_buat_admin;
+                }
+            }
+            if (MenuAdmin == 2)
+            {
+                system("cls");
+                displayTableStatus();
+                cout << endl;
+                cout << "Tekan y for back?";
+                cin >> yt;
+                if (yt == 'Y' || yt == 'y') {
+                    goto menu_buat_admin;
+                }
+            }
+            if (MenuAdmin == 3)
+            {
+            inputhari:
+                system("cls");
+                system("color F2");
+                cout << "Masukkan Film hari ini : " << endl;
+                cout << "#================================================#" << endl;
+                cout << "filem ke - 1  " << endl;
+                cout << "#================================================#" << endl;
+                cout << "filem ke - 2  " << endl;
+                cout << "#================================================#" << endl;
+                cout << "filem ke - 3  " << endl;
+                cout << "#================================================#" << endl;
+                cout << "Input filem ke : "; cin >> isi_filem;
+                for (i = 0; i < zzz; i++)
+                {
+                    if (isi_filem == indekfelm[i].felm)
+                        kondisi = 1;
+                    else
+                        kondisi = 2;
+                }
+                if (kondisi == 1)
+                {
+                    cout << "filem sudah " << endl;
+                    cin.get();
+                    goto inputhari;
+                }
+                else
+                {
+                    cin.ignore();
+                    cout << "Masukkan Nama : ";
+                    cin >> indekfelm[i].nama_film;
+                    cout << "Masukkan Harga Tiket Jumat : Rp ";
+                    cin >> indekfelm[i].hargaTiketJumattt;
+                    cout << "Masukkan Harga Tiket Sabtu : Rp ";
+                    cin >> indekfelm[i].hargaTiketSabtuuu;
+                    cout << "Masukkan Harga Tiket Minggu: Rp ";
+                    cin >> indekfelm[i].hargaTiketMingguuu;
+                }
+                indekfelm[i].felm = isi_filem;
+                zzz++;
+                cout << endl;
+                cout << "Ingin input Lagi ?(Y/T) : ";
+                cin >> yt;
+                if (yt == 'Y' || yt == 'y') {
+                    goto inputhari;
+                }
+                if (yt == 'T' || yt == 't') {
+                    goto menu_buat_admin;
+                }
+            }
+            if (MenuAdmin == 4)
+            {
+                system("cls");
+                system("color F3");
+                waktu();
+                ofstream myFile;
+                myFile.open("note.txt", ios::trunc);
+                cout << "                                        Mencetak Struk Nota " << endl << endl;
+                system("cls");
+                system("color F0");
+                myFile << jam << " : " << menit << " : " << detik << endl;
+                myFile << hari << " - " << bulan << " - " << tahun << endl;
+                myFile << "#================================================# " << endl;
+                myFile << "#~~~~~~~~~~~~~~   NOTA PEMBELIAN   ~~~~~~~~~~~~~~~# " << endl;
+                myFile << "#================================================# " << endl << endl;
+                myFile << "Total bayar Tiket Jumat  : Rp" << HargaJumat;
+                myFile << "-----------------------------------------------------------------" << endl;
+                myFile << "Total bayar Tiket Sabtu  : Rp" << HargaSabtu;
+                myFile << "-----------------------------------------------------------------" << endl;
+                myFile << "Total bayar Tiket Minggu : Rp" << HargaMinggu;
+                myFile << "-----------------------------------------------------------------" << endl;
+                myFile << "Total bayar : Rp" << HargaMinggu + HargaSabtu + HargaJumat << endl;
+                myFile << "#================================================# " << endl;
+                myFile << "#================================================# " << endl;
+                myFile.close();
+                cin.get();
+                goto startttt;
+            }
+            if (MenuAdmin == 5)
+            {
+                goto startttt;
+            }
+        }
+        else
+        {
+            cout << "INVALID ! COBALAGI ! " << endl;
+            cout << "Tekan (Y) untuk kembali  : ";
+            cin >> yt;
+            if (yt == 'Y' || yt == 'y') {
+                goto masukkan;
+            }
+        }
+    }
+    if (pilihanDiadmin == 2)
+    {
+    mbalekdirektur:
+        system("cls");
+        system("color F5");
+        cout << "#================================================# " << endl;
+        cout << "#================================================# " << endl;
+        cout << "#--------- SELAMAT DATANG DIREKTUR   ------------# " << endl;
+        cout << "#================================================# " << endl;
+        cout << "#================================================# " << endl;
+        cout << "Input user  : "; cin >> Direcc;
+        cout << "Input password : ";  cin >> passworddirec;
+        if (Direcc == "direc" && passworddirec == 1111)
+        {
+        menu_buat_direktur:
+            system("cls");
+            system("color F0");
+            cout << "############################### " << endl;
+            cout << "1. Tiket Sold             " << endl;
+            cout << "############################### " << endl;
+            cout << "2. Pendapatan Nett                 " << endl;
+            cout << "############################### " << endl;
+            cout << "3. Bill Report                 " << endl;
+            cout << "############################### " << endl;
+            cout << "Pilihan Anda : "; cin >> pilih_menu_direc;
+            cout << "############################### " << endl;
+            if (pilih_menu_direc == 1)
+            {
+                system("cls");
+                system("color F0");
+
+                cout << "#================================================# " << endl;
+                cout << "#================================================# " << endl;
+                cout << "#{{{{{{{{{{{{{      TICKET       }}}}}}}}}}}}}}}}# " << endl;
+                cout << "#================================================# " << endl;
+                cout << "#================================================# " << endl;
+                tiketanakSold = TotTiketanak[0] + TotTiketanak[1] + TotTiketanak[2];
+                TiketDewasaSold = TotTiketDewasa[0] + TotTiketDewasa[1] + TotTiketDewasa[2];
+
+                total_tiket_terjual = jumlahtiketDibeli[0] + jumlahtiketDibeli[1] + jumlahtiketDibeli[2];
+                cout << "#==============================================================# " << endl;
+                cout << "#==============================================================# " << endl;
+                cout << "Total ticket Anak Kecil Sold : " << tiketanakSold << " ticket " << endl;
+                cout << "#==============================================================# " << endl;
+                cout << "#==============================================================# " << endl;
+                cout << "Total ticket Dewasa Sold      : " << TiketDewasaSold << " ticket " << endl;
+                cout << "#==============================================================# " << endl;
+                cout << "#==============================================================# " << endl;
+                cout << "Total Yang Terjual               : " << total_tiket_terjual << " ticket " << endl;
+
+                cout << "TEKAN (Y) KE MENU AWAL";
+                cin >> yt;
+                if (yt == 'Y' || yt == 'y') {
+                    goto menu_buat_direktur;
+                }
+
+            }
+            if (pilih_menu_direc == 2)
+            {
+                cout << "#                  Keuntungan direktur               # " << endl;
+                cout << "  Ticket hari Jumat  : Rp " << total_Untung[0] << endl;
+                cout << " donasi               : Rp " << total_Untung[0] * 0.1 << endl;
+                cout << "Untung                     : Rp " << total_Untung[0] * 0.9 << endl;
+                cout << "  Ticket hari Sabtu  : Rp " << total_Untung[1] << endl;
+                cout << " donasi               : Rp " << total_Untung[1] * 0.1 << endl;
+                cout << "Untung                     : Rp " << total_Untung[1] * 0.9 << endl;
+                cout << "  Ticket hari Minggu : Rp " << total_Untung[2] << endl;
+                cout << " donasi               : Rp " << total_Untung[2] * 0 << endl;
+                cout << "Untung                     : Rp " << total_Untung[2] << endl;
+                cout << "Total Untung Bersih adalah : Rp " << (0.9 * total_Untung[0]) + (0.9 * total_Untung[1]) + total_Untung[2] << endl << endl;
+                cout << "Tekan y utnuk kembali";
+                cin >> yt;
+                if (yt == 'Y' || yt == 'y') {
+                    goto menu_buat_direktur;
+                }
+            }
+            if (pilih_menu_direc == 3)
+            {
+
+                system("cls");
+                system("color F0");
+                waktu();
+                ofstream myFile;
+                myFile.open("BillReport.txt", ios::trunc);
+                cout << "                                        Mencetak Laporan Keuangan " << endl << endl;
+                system("cls");
+                system("color F0");
+                myFile << jam << " : " << menit << " : " << detik << endl;
+                myFile << hari << " - " << bulan << " - " << tahun << endl;
+                myFile << "################################################### " << endl;
+                myFile << "#~~~~~~~~~~~~~~      Untung ANDA     ~~~~~~~~~~~~~~~# " << endl;
+                myFile << "################################################### " << endl;
+                myFile << "Total Nilai Ticket hari Jumat  : Rp " << total_Untung[0] << endl;
+                myFile << " donasi               : Rp " << total_Untung[0] * 0.1 << endl;
+                myFile << "Untung bersih                    : Rp " << total_Untung[0] * 0.9 << endl;
+                myFile << "Total Nilai Ticket hari Sabtu  : Rp " << total_Untung[1] << endl;
+                myFile << " donasi               : Rp " << total_Untung[1] * 0.1 << endl;
+                myFile << "Untung bersih                    : Rp " << total_Untung[1] * 0.9 << endl;
+                myFile << "Total Nilai Ticket hari Minggu : Rp " << total_Untung[2] << endl;
+                myFile << " donasi               : Rp " << total_Untung[2] * 0 << endl;
+                myFile << "Untung bersih                    : Rp " << total_Untung[2] << endl;
+                myFile << "Jumlah Keuntungan bersih adalah : Rp " << (0.9 * total_Untung[0]) + (0.9 * total_Untung[1]) + total_Untung[2] << endl << endl;
+                // menutup program
+                myFile.close();
+                cin.get();
+                goto startttt;
+            }
+        }
+        else
+        {
+            cout << "False ! COBALAGI ! " << endl;
+            cout << "Tekan y untuk kembali  : ";
+            cin >> yt;
+            if (yt == 'Y' || yt == 'y') {
+                goto mbalekdirektur;
+            }
+        }
+    }
+    cin.get();
+    return 0;
+}
