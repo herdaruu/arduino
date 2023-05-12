@@ -1,0 +1,686 @@
+#include <iostream>
+
+#include <fstream>
+
+#include <conio.h>
+
+#include <string>
+
+#include <windows.h>
+
+#pragma warning(disable:4996)
+
+using namespace std;
+
+int mulai, selesai; //inisialisasi waktu mulai - selesai
+
+
+
+const int TABLE_COUNT = 10;
+
+const int MAX_TABLES = 10;
+
+bool tables[TABLE_COUNT] = { true, true, true, true, true, true, true, true, true, true };
+
+const int hargajam = 15000;
+
+
+
+//input uang customer
+
+int uang;
+
+
+
+void printReceipt(int jumlah_meja, const string& name, int tableNums[], int mulai[], int selesai[], int hargajam, int totalBill, int uang);//menerima nomor meja dan nama pelanggan
+
+void displayTableStatus();
+
+void displayMenu();
+
+void bookTable();
+
+void checkTables();
+
+void checkBilling();
+
+void delay(void) {
+
+    int delay;
+
+    delay = 1;
+
+    while (delay < 290000) {
+
+        delay++;
+
+    }
+
+}
+
+
+
+//fungsi tampilkan pesan selamat datang
+
+void pesan_ane(void) {
+
+    int i, panjg_char;
+
+    char pesan[] = { 'S','e','l','a','m','a','t',' ','D','a','t','a','n','g','\0' };
+
+    i = 0; panjg_char = strlen(pesan);
+
+    cout << "\n\t ";
+
+    while (i < panjg_char) {
+
+        cout << pesan[i];
+
+        delay();
+
+        i++;
+
+    }
+
+    pesan[i] = 0;
+
+    cout << endl;
+
+}
+
+
+
+//fungsi menampilkan pesan di program
+
+void pesan(void) {
+
+    int i, panjg_char;
+
+    char pesan[] = { 'S','i','l','a','h','k','a','n',' ','L','o','g','i','n','\0' };
+
+    i = 0; panjg_char = strlen(pesan);
+
+    cout << "\n\t\t ";
+
+    while (i < panjg_char) {
+
+        cout << pesan[i];
+
+        delay();
+
+        i++;
+
+    }
+
+    pesan[i] = 0;
+
+    cout << endl;
+
+}
+
+
+
+//fungsi menampilkan pesan rekursif+
+
+void pesann(void) {
+
+    int i, panjg_char;
+
+    char pesan[] = { 'D','a','h','u','l','u','!','!','\0' };
+
+    i = 0; panjg_char = strlen(pesan);
+
+    cout << "\n\t\t\t ";
+
+    while (i < panjg_char) {
+
+        cout << pesan[i];
+
+        delay();
+
+        i++;
+
+    }
+
+    pesan[i] = 0;
+
+    cout << endl << endl;
+
+}
+
+
+
+//fungsi menampilkan garis =
+
+void garis(void) {
+
+    int i;
+
+    for (i = 1; i <= 22; i++) {
+
+        cout << "= ";
+
+        delay();
+
+    }
+
+    cout << endl;
+
+
+
+}
+
+int main()
+
+{
+
+    system("color f0");
+
+    garis();
+
+    system("color f1");
+
+    pesan_ane();
+
+    system("color f2");
+
+    pesan();
+
+    system("color f3");
+
+    pesann();
+
+    system("color f4");
+
+    garis();
+
+    system("color f5");
+
+    string username, password;
+
+    char ch;
+
+    int yt;
+
+    bool loggedIn = false;
+
+    while (!loggedIn) { // looping untuk proses login
+
+
+
+        cout << "\n";
+
+        cout << "===============================================" << endl;
+
+        cout << "|           WELCOME TO BILLIARD CLUB           |" << endl;
+
+        cout << "===============================================" << endl;
+
+        int attempts = 0;
+
+        while (attempts < 3) {
+
+            cout << "Masukkan username: ";
+
+            cin >> username;
+
+            cout << "Masukkan password: ";
+
+            while (true) {
+
+                ch = _getch();
+
+                if (ch == '\r') { //arti \r adalah enter
+
+                    break;
+
+                }
+
+                else if (ch == '\b' && password.length() > 0) {
+
+                    password.pop_back();
+
+                    cout << "\b \b"; //arti \b adalah backspace
+
+                }
+
+                else {
+
+                    password += ch;
+
+                    cout << "*";
+
+                }
+
+            }
+
+
+
+            cout << endl;
+
+
+
+            if ((username == "david" && password == "admin123") ||
+
+                (username == "erika" && password == "12345") ||
+
+                (username == "daru" && password == "kacung1") ||
+
+                (username == "admin" && password == "1111")) {
+
+                cout << "Login successful!" << endl;
+
+                loggedIn = true;
+
+                system("cls");
+
+                break;
+
+            }
+
+            else {
+
+                cout << "Login failed. Invalid username or password. Try again." << endl;
+
+                attempts++;
+
+                password = "";
+
+            }
+
+        }
+
+
+
+        if (!loggedIn) {
+
+            cout << "Too many failed attempts. Exiting program." << endl;
+
+            return 0;
+
+        }
+
+    }
+
+
+
+    // Main loop for the program
+
+    while (true) {
+
+        displayMenu();
+
+
+
+        int choice;
+
+        cin >> choice;
+
+
+
+        switch (choice) {
+
+        case 1:
+
+            system("cls");
+
+            bookTable();
+
+            break;
+
+        case 2:
+
+            system("cls");
+
+            checkTables();
+
+            break;
+
+        case 3:
+
+            system("cls");
+
+            checkBilling();
+
+            break;
+
+        case 4:
+
+            return 0;
+
+        default:
+
+            cout << "Invalid input. Please try again." << endl;
+
+            break;
+
+        }
+
+    }
+
+}
+
+
+
+void displayMenu()
+
+{
+
+    cout << "=============================================" << endl;
+
+    cout << "|                  MAIN MENU                 |" << endl;
+
+    cout << "=============================================" << endl;
+
+    cout << "|  1. Book a table                           |" << endl;
+
+    cout << "|  2. Check table availability               |" << endl;
+
+    cout << "|  3. Check Billing                          |" << endl;
+
+    cout << "|  4. Exit                                   |" << endl;
+
+    cout << "=============================================" << endl;
+
+}
+
+
+
+void bookTable()
+
+{
+
+    string name;
+
+    int jumlah_meja;
+
+    int totalBill = 0;
+
+    int tableNum;
+
+    cout << "Nama Pengunjung: ";
+
+    cin >> name;
+
+    cout << "Berapa meja yang ingin dipesan : ";
+
+    cin >> jumlah_meja;
+
+
+
+    // Arrays to store table details
+
+    int tableNums[MAX_TABLES];
+
+    int mulai[MAX_TABLES];
+
+    int selesai[MAX_TABLES];
+
+
+
+    // Book multiple tables
+
+    for (int i = 0; i < jumlah_meja; i++)
+
+    {
+
+        system("cls");
+
+
+
+        displayTableStatus();
+
+        cout << "Masukkan nomor meja (1-10): ";
+
+        cin >> tableNum;
+
+
+
+        if (tableNum < 1 || tableNum > TABLE_COUNT) {
+
+            i--;
+
+            cout << "Invalid table number." << endl;
+
+            continue;
+
+        }
+
+
+
+        if (!tables[tableNum - 1]) {
+
+            cout << "Table " << tableNum << " is not available." << endl;
+
+            continue;
+
+        }
+
+
+
+        // Calculate the total bill for all tables
+
+        balik:
+
+        cout << "harga Rp 15000/jam\n";
+
+        cout << "Masukkan jam mulai :";
+
+        cin >> mulai[i];
+
+        cout << "Masukkan jam selesai : ";
+
+        cin >> selesai[i];
+
+        if (mulai[i]> selesai[i]) {
+
+            cout << "waktu yang anda masukkan salah\n";
+
+            goto balik;
+
+        }
+
+        int tableBill = (selesai[i] - mulai[i]) * hargajam;
+
+        totalBill += tableBill;
+
+
+
+        cout << "Meja " << tableNum << " dipesan oleh " << name << " dengan total harga : " << tableBill << endl;
+
+
+
+        // menyimpan detail meja
+
+        tableNums[i] = tableNum;
+
+        tables[tableNum - 1] = false;
+
+    }
+
+
+
+    // pembayaran untuk semua meja
+
+    cout << "Total harga " << name << " adalah " << totalBill << endl;
+
+    cout << "Masukkan uang: ";
+
+    cin >> uang;
+
+
+
+    if (uang < totalBill) {
+
+        cout << "UANG KURANG , HARAP ISI KEMBALI." << endl;
+
+        // membuat status meja menjadi available kembali
+
+        for (int i = 0; i < jumlah_meja; i++) {
+
+            tables[tableNums[i] - 1] = true;
+
+        }
+
+        return;
+
+    }
+
+
+
+    int kembalian = uang - totalBill;
+
+    cout << "Change: " << kembalian << endl;
+
+
+
+    cout << "Your tables are ready to play, have fun!" << endl;
+
+    Sleep(2000);
+
+    printReceipt(jumlah_meja, name, tableNums, mulai, selesai, hargajam, totalBill, uang);
+
+    system("cls");
+
+}
+
+
+
+void printReceipt(int jumlah_meja, const string& name, int tableNums[], int mulai[], int selesai[], int hargajam, int totalBill, int uang)
+
+{
+
+    system("color F5");
+
+    time_t ttime = time(0);
+
+    tm* local_time = localtime(&ttime);
+
+    ofstream receiptFile("receipt.txt", ios::trunc);
+
+    receiptFile << "                      DZ Billiard                    " << endl;
+
+    receiptFile << "Jl.Adisucipto No.139,Jajar,Kec.Laweyan,kota Surakarta" << endl;
+
+    receiptFile << "-----------------------------------------------------" << endl;
+
+    receiptFile << "Kode Pemesanan: " << &name << endl;
+
+    receiptFile << "Tanggal : " << local_time->tm_mday << "/" << 1 + local_time->tm_mon << "/" << 1900 + local_time->tm_year;
+
+    receiptFile << "         Waktu : " << local_time->tm_hour << ":";
+
+    receiptFile << local_time->tm_min << ":";
+
+    receiptFile << 1 + local_time->tm_sec << endl;
+
+    receiptFile << "Customer Name: " << name << endl;
+
+
+
+    // detail cetak untuk setiap meja yang sudah dipesan
+
+    for (int i = 0; i < jumlah_meja; i++)
+
+    {
+
+        receiptFile << "Table Number: " << tableNums[i] << endl;
+
+        receiptFile << "Lama booking :" << (selesai[i] - mulai[i]) << " jam " << endl;
+
+        receiptFile << "Total    : " << (selesai[i] - mulai[i]) * hargajam << endl;
+
+        receiptFile << "----------------------------------------------" << endl;
+
+    }
+
+
+
+    receiptFile << "Total bill: " << totalBill << endl;
+
+    receiptFile << "Bayar    : " << uang << endl;
+
+    receiptFile << "Kembali  : " << (uang - totalBill) << endl;
+
+    receiptFile << "----------------------------------------------------" << endl;
+
+    receiptFile << "                 Tel : 033 853 67 16                " << endl;
+
+    receiptFile << "                 Fax : 033 853 67 19                " << endl;
+
+    receiptFile << "             email : DZBilliard@gmail.com           " << endl;
+
+    receiptFile << "            Thank you for playing with us!          " << endl << endl;
+
+    receiptFile.close();
+
+    cout << "Booking successful! Receipt saved as receipt.txt" << endl;
+
+}
+
+
+
+
+
+
+
+void displayTableStatus()
+
+{
+
+    cout << "Available Billiard Tables:" << endl;
+
+    for (int i = 0; i < TABLE_COUNT; i++) {
+
+        cout << "Table " << (i + 1) << ": " << (tables[i] ? "Available" : "Not available") << endl;
+
+    }
+
+}
+
+
+
+
+
+void checkTables()
+
+{
+
+    displayTableStatus();
+
+}
+
+
+
+void checkBilling()
+
+{
+
+    cout << "Billing Information: " << endl;
+
+    string line;
+
+    ifstream receiptFile("receipt.txt");
+
+
+
+    if (receiptFile.is_open()) {    //untuk mencetak nota
+
+        while (getline(receiptFile, line)) {
+
+            cout << line << endl;
+
+        }
+
+        receiptFile.close();
+
+    }
+
+    else {
+
+        cout << "Unable to open file" << endl;
+
+    }
+
+}
+
