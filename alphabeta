@@ -1,0 +1,995 @@
+//DAFTAR LIBRARY
+
+#include <iostream>
+
+#include <Windows.h>
+
+#include <ctime>
+
+#include <fstream>
+
+#include <conio.h>
+
+#pragma warning (disable: 4996)
+
+//DAFTAR VARIABEL
+
+using namespace std;
+
+char opsi, menu, opsiCust;
+
+string hari, kota, pobus, namaCust, noKTP;
+
+bool cekAdmin = false;
+
+bool cekCust = false;
+
+char yt;
+
+int urutan = 0;
+
+int pilih1, akhir;
+
+void cetak();
+
+void bayar();
+
+int nom, kembalian, jumKursi;
+
+//array
+
+string nama[100][10];
+
+string tanggal[100];
+
+int harga[100];
+
+int kursi[100];
+
+string destinasi[100];
+
+//PROGRAM UNTUK TAMPILAN awal
+
+void tampilan()
+
+{
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^";
+
+    cout << "|    |||                                                                                                        |||    |";
+
+    cout << "|     ||                                     LOKET  ELEKTRONIK BUS                                              ||     |";
+
+    cout << "|      |                                       TERMINAL GIWANGAN                                                |      |";
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^";
+
+    cout << endl;
+
+}
+
+int pengguna()
+
+{
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "^                                            Masukkan Status Anda :                                                    ^" << endl;
+
+    cout << "^                                                1. Admin                                                              ^" << endl;
+
+    cout << "^                                                2. Customer                                                           ^" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "  Status Anda : "; cin >> opsi;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl << endl;
+
+    return opsi;
+
+}
+
+//program untuk tampilan admin berhasil login
+
+void berhasil()
+
+{
+
+    system("cls");
+
+    tampilan();
+
+    cout << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^";
+
+    cout << "\n||                                            !!Login Berhasil!!                                                      ||";
+
+    cout << "\n||                                            !!Selamat Datang!!                                                      ||";
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^";
+
+    cout << endl;
+
+}
+
+//program untuk tampilan customer berhasil login
+
+int berhasilCust()
+
+{
+
+    if (cekCust == true)
+
+    {
+
+        cout << endl;
+
+        cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^";
+
+        cout << "\n||                                            !!Selamat Datang!!                                                      ||";
+
+        cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^";
+
+        cout << endl;
+
+    }
+
+    return 0;
+
+}
+
+void haloadmin()//admin brhs
+
+{
+
+    cout << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^";
+
+    cout << "\n||                                             !!HALLO  ADMIN!!                                                       ||";
+
+    cout << "\n||                                            !!Selamat Datang!!                                                      ||";
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^";
+
+    cout << endl;
+
+}
+
+//program untuk memasukkan password dan username admin
+
+int pwAdmin()
+
+{
+
+    string username, password = "";
+
+    char ch;
+
+    cout << "Enter username: ";
+
+    cin >> username;
+
+    cout << "Enter password: ";
+
+    while (true)
+
+    {
+
+        ch = _getch();
+
+        if (ch == '\r')
+
+        { // jika enter
+
+            break;
+
+        }
+
+        else if (ch == '\b')
+
+        { // jika backspace
+
+            if (password.length() > 0)
+
+            {
+
+                password.pop_back();
+
+                cout << "\b \b";
+
+            }
+
+        }
+
+        else
+
+        {
+
+            password += ch;
+
+            cout << "*";
+
+        }
+
+    }
+
+    cout << endl;
+
+    if (username == "admin" && password == "1234")
+
+    {
+
+        cekAdmin = true;
+
+    }
+
+    else
+
+    {
+
+        cekAdmin = false;
+
+    }
+
+    return 0;
+
+}
+
+//program menu ketika memilih sebagai admin
+
+int menuAdmin()
+
+{
+
+    //tampilan();
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "^                                         Pilih Menu Yang Anda Inginkan :                                              ^" << endl;
+
+    cout << "^                                           1. Input Jadwal Keberangkatan                                              ^" << endl;
+
+    cout << "^                                           2. Ubah Jadwal Keberangkatan                                               ^" << endl;
+
+    cout << "^                                           3. Hapus Jadwal Keberangkatan                                              ^" << endl;
+
+    cout << "^                                           4. Cek Jadwal Keberangkatan                                                ^" << endl;
+
+    cout << "^                                           5. Log Out                                                                 ^" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "  Pilihan Anda : "; cin >> menu;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl << endl;
+
+    //return opsiAdmin;
+
+    return 0;
+
+}
+
+//program menu ketika memilih sebagai customer
+
+int menuCust()
+
+{
+
+    //tampilan();
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "^                                         Pilih Menu Yang Anda Inginkan :                                              ^" << endl;
+
+    cout << "^                                           a. Pesan Tiket                                                             ^" << endl;
+
+    cout << "^                                           b. Log Out                                                                 ^" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "  Pilihan Anda : "; cin >> opsiCust;
+
+    cout << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl << endl;
+
+    system("cls");
+
+    tampilan();
+
+    return 0;
+
+}
+
+//program untuk input jadwal keberangkatan
+
+void input()
+
+{
+
+awalInput:
+
+    system("cls");
+
+    tampilan();
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "^                                          Input Jadwal Keberangkatan                                                  ^" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "    Masukkan Jadwal Keberangkatan " << endl;
+
+    cout << " 1. Tanggal bus	 : "; cin >> tanggal[urutan];    cout << " 2. Tujuan bus	 : "; cin >> destinasi[urutan];
+
+    cout << " 3. Harga tiket	 : Rp. "; cin >> harga[urutan];
+
+    cout << " 4. Jumlah Kursi : "; cin >> kursi[urutan];
+
+    urutan = urutan + 1;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << " Apakah Anda Ingin Memasukkan Jadwal Lagi?" << endl << "  y / t			: "; cin >> yt;
+
+    if (yt == 'Y' || yt == 'y')
+
+    {
+
+        goto awalInput;
+
+    }
+
+    if (yt == 'T' || yt == 't')
+
+    {
+
+        system("cls");
+
+        tampilan();
+
+        menuAdmin();
+
+    }
+
+}
+
+//program untuk ubah jadwal keberangkatan
+
+void ubah()
+
+{
+
+    int a, b = 1, c;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "^                                           Ubah Jadwal Keberangkatan                                                  ^" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    for (a = 0; a < urutan; a++)
+
+    {
+
+        cout << "  " << b << ". Keberangkatan	--> Tanggal " << tanggal[a] << endl;
+
+        cout << "     Tujuan	        --> " << destinasi[a] << endl;
+
+        cout << "     Harga		--> Rp. " << harga[a] << endl ;
+
+        cout << "     Jumlah kursi --> " << kursi[a] << endl << endl;
+
+        b = b + 1;
+
+    }
+
+    cout << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "                                                    Pilihan : "; cin >> c;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "^                                           Ubah Jadwal Keberangkatan                                                  ^" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "    Masukkan Jadwal Keberangkatan " << endl;
+
+    cout << " 1. Tanggal bus	 : "; cin >> tanggal[c - 1];
+
+    cout << " 2. Tujuan bus	 : "; cin >> destinasi[c - 1];
+
+    cout << " 3. Harga tiket	 : Rp. "; cin >> harga[c - 1];
+
+    cout << " 4. Jumlah Kursi  : ";cin >> kursi[c-1];
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "                                             Jadwal sudah terganti" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    Sleep(1000);
+
+}
+
+//program untuk hapus jadwal keberangkatan
+
+void hapus()
+
+{
+
+    int a, b = 1, c, d;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "^                                           Hapus Jadwal Keberangkatan                                                 ^" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    for (a = 0; a < urutan; a++)
+
+    {
+
+        cout << "  " << b << ". Keberangkatan	--> Tanggal " << tanggal[a] << endl;
+
+        cout << "     Tujuan	        --> " << destinasi[a] << endl;
+
+        cout << "     Harga		--> Rp. " << harga[a] << endl;
+
+        cout << "     Jumlah kursi --> " << kursi[a] << endl << endl;
+
+        b = b + 1;
+
+    }
+
+    cout << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "                                                      Pilihan : "; cin >> c;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "                                   Apakah Anda Akan Menghapus Jadwal Tersebut?  y/t" << endl << "  : "; cin >> yt;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    if (yt == 'Y' || yt == 'y')
+
+    {
+
+        for (d = c; d <= urutan + 1; d++) {
+
+            tanggal[d - 1] = tanggal[d];
+
+            harga[d - 1] = harga[d];
+
+            destinasi[d - 1] = destinasi[d];
+
+            kursi[d - 1] = kursi[d];
+
+        }
+
+        cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+        cout << "                                          Jadwal sudah terhapus" << endl;
+
+        cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+        urutan = urutan - 1;
+
+        Sleep(2000);
+
+        tampilan();
+
+        system("cls");
+
+    }
+
+    if (yt == 'T' || yt == 't')
+
+    {
+
+        menuAdmin();
+
+    }
+
+}
+
+void cekJadwal() {
+
+    int a, b = 1, c, d;
+
+    for (a = 0; a < urutan; a++)
+
+    {
+
+        cout << "  " << b << ". Keberangkatan	--> Tanggal " << tanggal[a] << endl;
+
+        cout << "     Tujuan	        --> " << destinasi[a] << endl;
+
+        cout << "     Harga		--> Rp. " << harga[a] << endl;
+
+        cout << "     Jumlah kursi --> " << kursi[a] << endl << endl;
+
+        b = b + 1;
+
+    }
+
+    Sleep(5000);
+
+    system("cls");
+
+    tampilan();
+
+}
+
+//program untuk menampilkan pilihan jadwal keberangkatan
+
+void pilihCust()
+
+{
+
+    int a, b = 1;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "|             Pesan Tiket bus           |" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "|   Jadwal Keberangkatan yang Tersedia  |" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl << endl;
+
+    for (a = 0; a < urutan; a++)
+
+    {
+
+        cout << "  " << b << ". Keberangkatan	--> Tanggal " << tanggal[a] << endl;
+
+        cout << "     Harga		--> Rp. " << harga[a] << endl;
+
+        cout << "     Harga		--> Rp. " << harga[a] << endl;
+
+        cout << "     Jumlah kursi --> " << kursi[a] << endl << endl;
+
+        b = b + 1;
+
+    }
+
+    cout << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "  Pilihan : "; cin >> pilih1;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << " Jumlah Kursi : "; cin >> jumKursi;
+
+    cout << " Nama     : "; cin >> namaCust;
+
+    cout << " No. KTP  : "; cin >> noKTP;
+
+    bayar();
+
+    system("cls");
+
+    cetak();
+
+    system("cls");
+
+}
+
+//program tampilan sebelum struk dicetak
+
+void bayar()
+
+{
+
+    system("cls");
+
+    tampilan();
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "|             Pesan Tiket bus           |" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    cout << "|   Jadwal Keberangkatan yang Tersedia  |" << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl << endl;
+
+    cout << "| Nama                 : " << namaCust << endl;
+
+    cout << "| No KTP               : " << noKTP << endl;
+
+    cout << "| Kota tujuan          : " << destinasi[pilih1 - 1] << endl;
+
+    cout << "| Tanggal Berangkat    : " << tanggal[pilih1 - 1] << endl;
+
+    cout << "| Jumlah Kursi         : " << kursi[pilih1 - 1] << endl << endl;
+
+    cout << "| Harga                : Rp. " << harga[pilih1 - 1] << endl;
+
+    cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+bayarneh:
+
+    cout << "| Nominal pembayaran   : Rp "; cin >> nom;
+
+    kembalian = ((nom - harga[pilih1 - 1]) * jumKursi);
+
+    if (kembalian < 0) {
+
+        cout << "UANG ANDA KURANG" << endl;
+
+        goto bayarneh;
+
+    }
+
+    else {
+
+        cout << "|       KEMBALIAN      : Rp " << kembalian << endl;
+
+        cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+        cout << "|           KODE BOOKING             " << endl;
+
+        cout << "|               " << &nama[pilih1 - 1] << endl;
+
+        cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+        urutan = urutan - 1;
+
+        Sleep(5000);
+
+    }
+
+}
+
+//program untuk mencetak struk
+
+void cetak() {
+
+    time_t now = time(0);
+
+    tm* ltm = localtime(&now);
+
+    ofstream teks;
+
+    teks.open("List struk.txt ", ios::trunc);
+
+    teks << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    teks << "|            TERMINAL GIWANGAN          |" << endl;
+
+    teks << "|                                       |" << endl;
+
+    teks << "|           LOKET ELEKTRONIK BUS        |" << endl;
+
+    teks << "|                                       |" << endl;
+
+    teks << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    teks << "              " << ltm->tm_mday;
+
+    teks << " / " << 1 + ltm->tm_mon;
+
+    teks << " / " << 1900 + ltm->tm_year << endl;
+
+    teks << "                 " << 0 + ltm->tm_hour;
+
+    teks << ":" << 0 + ltm->tm_min;
+
+    teks << ":" << ltm->tm_sec << endl << endl;
+
+    teks << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    teks << "|               TIKET BUS               |" << endl;
+
+    teks << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl << endl;
+
+    teks << "| Jumlah Kursi       : " << jumKursi << endl;
+
+    teks << "| Nama               : " << namaCust  << endl;
+
+    teks << "| No KTP             : " << noKTP << endl;
+
+    teks << "| kota tujuan        : " << destinasi[pilih1 - 1]  << endl;
+
+    teks << "| Tanggal Berangkat  : " << tanggal[pilih1 - 1]  << endl;
+
+    teks << "| Harga              : Rp. " << harga[pilih1 - 1] << endl;
+
+    teks << "|                  LUNAS                |" << endl;
+
+    teks << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+    teks << "|            KODE BOOKING           " << endl;
+
+    teks << "|            " << &nama[pilih1 - 1] << "    " << endl;
+
+    teks << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl << endl << endl;
+
+    teks.close();
+
+}
+
+int admin() {
+
+awal:
+
+    system("cls");
+
+    tampilan();
+
+    haloadmin();
+
+    pwAdmin();
+
+    if (cekAdmin == true)
+
+    {
+
+    pilmen:
+
+        berhasil();
+
+    awalAdmin:
+
+        menuAdmin();
+
+        if (menu == '1')
+
+        {
+
+            input();
+
+        }
+
+        if (menu == '2')
+
+        {
+
+            if (urutan == 0)
+
+            {
+
+                system("cls");
+
+                tampilan();
+
+                cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+                cout << "                                           Anda Belum Memasukkan Jadwal Keberangkatan" << endl;
+
+                cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+                Sleep(1000);
+
+                system("cls");
+
+                tampilan();
+
+                goto awalAdmin;
+
+            }
+
+            else
+
+            {
+
+                ubah();
+
+                goto awalAdmin;
+
+            }
+
+        }
+
+        if (menu == '3')
+
+        {
+
+            if (urutan == 0)
+
+            {
+
+                system("cls");
+
+                tampilan();
+
+                cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+                cout << "                                           Anda Belum Memasukkan Jadwal Keberangkatan" << endl;
+
+                cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+                Sleep(1000);
+
+                system("cls");
+
+                tampilan();
+
+                goto awalAdmin;
+
+            }
+
+            else
+
+            {
+
+                hapus();
+
+                goto awalAdmin;
+
+            }
+
+        }
+
+        if (menu == '4')
+
+        {
+
+            if (urutan == 0)
+
+            {
+
+                system("cls");
+
+                tampilan();
+
+                cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+                cout << "                                           Anda Belum Memasukkan Jadwal Keberangkatan" << endl;
+
+                cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+                Sleep(1000);
+
+                system("cls");
+
+                tampilan();
+
+                goto awalAdmin;
+
+            }
+
+            else
+
+            {
+
+                cekJadwal();
+
+                goto awalAdmin;
+
+            }
+
+        }
+
+        if (menu == '5')
+
+        {
+
+            system("cls");
+
+            return pengguna();
+
+        }
+
+    }
+
+    else if (cekAdmin == false)
+
+    {
+
+        cout << "\nUsername atau password salah." << endl;
+
+        system("cls");
+
+        tampilan();
+
+        haloadmin();
+
+        goto awal;
+
+    }
+
+}
+
+int main()
+
+{
+
+    system("color F0");
+
+awal1:
+
+    system("cls");
+
+    tampilan();
+
+    pengguna();
+
+    if (opsi == '1') {
+
+        admin();
+
+    }
+
+    if (opsi == '2') {
+
+        cekCust = true;
+
+        system("cls");
+
+    awalan:
+
+        tampilan();
+
+        berhasilCust();
+
+        menuCust();
+
+        if (opsiCust == 'a') {
+
+            if (urutan == 0)
+
+            {
+
+                system("cls");
+
+                tampilan();
+
+                cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+                cout << "                                           Belum Ada Jadwal Keberangkatan" << endl;
+
+                cout << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << endl;
+
+                Sleep(1000);
+
+                system("cls");
+
+                tampilan();
+
+                goto awalan;
+
+            }
+
+            else
+
+            {
+
+                pilihCust();
+
+                goto awalan;
+
+            }
+
+        }
+
+        if (opsiCust == 'b') {
+
+            goto awal1;
+
+        }
+
+    }
+
+}
