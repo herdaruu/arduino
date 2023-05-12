@@ -1,0 +1,940 @@
+#include <iostream>
+
+#include <Windows.h>
+
+#include <iomanip>
+
+#include <fstream>
+
+#include <ctime>
+
+#include <string>
+
+#include <conio.h>
+
+
+
+using namespace std;
+
+/* [0][0] tujuan
+
+*  [0][1] berangkat
+
+*  [0][2] kedatangan
+
+   [0][3] kelas
+
+   [0][4] kereta*/
+
+string rute0[6][5] =
+
+{
+
+	{"Jogja","09:00","10:00","Ekonomi","argo lawu"},
+	{"Jakarta","10:00","18:00","Ekonomi","argo lawu"},
+
+	{"Jakarta","09:00","19:00","Eksklusif","argo lawu"},
+
+	{"Madiun","09:00","15:00","Eksklusif","argo lawu"},
+
+	{"Surabaya","11:00","16:00","Bisnis","argo lawu"},
+
+	{"Bandung","08:00","15:00","Bisnis","argo lawu"}
+
+};
+
+/* [0][0] kursi
+
+*  [0][1] harga
+
+   [0][2] terjual*/
+
+int rute1[6][3] =
+
+{
+
+	{55,15000,0},
+
+	{55,50000,0},
+
+	{38,100000,0},
+
+	{40,150000,0},
+
+	{25,900000,0},
+
+	{25,500000,0}
+
+};
+
+/*
+
+[0][0] nama 
+
+[0][1] no hp
+
+*/
+
+string pembeli0[50][2];
+
+/*
+
+[0][0] rute yang dibeli
+
+[0][1] jumlah kursi
+
+[0][2] total harga
+
+[0][3] total bayar
+
+*/
+
+int pembeli1[50][4];
+
+//fungsi untuk menampilkan tabel pada bagian admin
+
+void tampil()
+
+{
+
+	int i = 0;
+
+	while (rute0[i][0] != "")
+
+	{
+
+		i++;
+
+	}
+
+	cout << "+----+----------------+---------------+------------+-------------+----------------+-------+-------------+" << endl;
+
+	cout << "| NO |     Tujuan     | Keberangkatan | Kedatangan |    Kelas    |   Kereta Api   | kursi |    Harga    |" << endl;
+
+	cout << "+----+----------------+---------------+------------+-------------+----------------+-------+-------------+" << endl;
+
+	for (int a = 0; a < i; a++)
+
+	{
+
+		cout << "| " << setw(2) << a + 1 << " | ";
+
+		cout << setw(14) << left << rute0[a][0] << " | ";
+
+		cout << setw(13) << left << rute0[a][1] << " | ";
+
+		cout << setw(10) << left << rute0[a][2] << " | ";
+
+		cout << setw(11) << left << rute0[a][3] << " | ";
+
+		cout << setw(14) << left << rute0[a][4] << " | ";
+
+		cout << setw(5) << left << rute1[a][0] << " | ";
+
+		cout << setw(11) << left << rute1[a][1] << " |" << endl;
+
+		cout << "+----+----------------+---------------+------------+-------------+----------------+-------+-------------+" << endl;
+
+	}
+
+}
+
+//fungsi untuk menampilkan tabel pada bagian user/guest
+
+void tampilgs()
+
+{
+
+	int i = 0;
+
+	while (rute0[i][0] != "")
+
+	{
+
+		i++;
+
+	}
+
+	cout << "+----+----------------+---------------+------------+-------------+----------------+------------+-------------+" << endl;
+
+	cout << "| NO |     Tujuan     | Keberangkatan | Kedatangan |    Kelas    |   Kereta Api   | Sisa kursi |    Harga    |" << endl;
+
+	cout << "+----+----------------+---------------+------------+-------------+----------------+------------+-------------+" << endl;
+
+	for (int a = 0; a < i; a++)
+
+	{
+
+		cout << "| " << setw(2) << a + 1 << " | ";
+
+		cout << setw(14) << left << rute0[a][0] << " | ";
+
+		cout << setw(13) << left << rute0[a][1] << " | ";
+
+		cout << setw(10) << left << rute0[a][2] << " | ";
+
+		cout << setw(11) << left << rute0[a][3] << " | ";
+
+		cout << setw(14) << left << rute0[a][4] << " | ";
+
+		cout << setw(10) << left << rute1[a][0] - rute1[a][2] << " | ";
+
+		cout << setw(11) << left << rute1[a][1] << " |" << endl;
+
+		cout << "+----+----------------+---------------+------------+-------------+----------------+------------+-------------+" << endl;
+
+	}
+
+}
+
+/*
+
+void tambah()
+
+{
+
+	string tuj, ber, samp;
+
+	int har, kur, i = 0;
+
+	while (rute0[0][i] != "")
+
+	{
+
+		i++;
+
+	}
+
+	cout << "+-------------+" << endl;
+
+	cout << "| Tambah Rute |" << endl;
+
+	cout << "+-------------+" << endl;
+
+	cout << "Masukkan tujuan : "; cin >> tuj;
+
+	rute0[0][i] = tuj;
+
+	cout << "Keberangkatan : "; cin >> ber;
+
+	rute0[1][i] = ber;
+
+	cout << "Kedatangan : "; cin >> samp;
+
+	rute0[2][i] = samp;
+
+	cout << "Jumlah kursi : "; cin >> kur;
+
+	rute1[0][i] = kur;
+
+	cout << "Harga : "; cin >> har;
+
+	rute1[1][i] = har;
+
+}*/
+
+//fungsi untuk menampilkan tabel dengan tambahan jumlah tiket yang terjual pada bagian admin
+
+void rutjual()
+
+{
+
+AWL:
+
+	system("CLS");
+
+	int i = 0;
+
+	char wo;
+
+	while (rute0[i][0] != "")
+
+	{
+
+		i++;
+
+	}
+
+	cout << "+----+----------------+---------------+------------+-------------+----------------+-------+-------------+---------+" << endl;
+
+	cout << "| NO |     Tujuan     | Keberangkatan | Kedatangan |    Kelas    |   Kereta Api   | kursi |    Harga    | Terjual |" << endl;
+
+	cout << "+----+----------------+---------------+------------+-------------+----------------+-------+-------------+---------+" << endl;
+
+	for (int a = 0; a < i; a++)
+
+	{
+
+		cout << "| " << setw(2) << a + 1 << " | ";
+
+		cout << setw(14) << left << rute0[a][0] << " | ";
+
+		cout << setw(13) << left << rute0[a][1] << " | ";
+
+		cout << setw(10) << left << rute0[a][2] << " | ";
+
+		cout << setw(11) << left << rute0[a][3] << " | ";
+
+		cout << setw(14) << left << rute0[a][4] << " | ";
+
+		cout << setw(5) << left << rute1[a][0] << " | ";
+
+		cout << setw(11) << left << rute1[a][1] << " | ";
+
+		cout << setw(7) << left << rute1[a][2] << " |" << endl;
+
+		cout << "+----+----------------+---------------+------------+-------------+----------------+-------+-------------+---------+" << endl;
+
+	}
+
+	cout << "Pencet y untuk lanjut..."; cin >> wo;
+
+	if (wo == 'y' || wo == 'Y')
+
+	{
+
+		system("CLS");
+
+	}
+
+	else
+
+	{
+
+		goto AWL;
+
+		system("CLS");
+
+	}
+
+}
+
+//fungsi untuk melakukan update rute oleh admin
+
+void updt()
+
+{
+
+	system("CLS");
+
+	string tuj, ber, samp, kel, reta;
+
+	int har, kur, pilih;
+
+	char ip;
+
+	tampil();
+
+	cout << "Pilih nomor yang akan anda ubah : "; cin >> pilih;
+
+	system("CLS");
+
+	cout << "+----+----------------+---------------+------------+-------------+----------------+-------+-------------+" << endl;
+
+	cout << "| " << setw(2) << pilih << " | ";
+
+	cout << setw(14) << left << rute0[pilih - 1][0] << " | ";
+
+	cout << setw(13) << left << rute0[pilih - 1][1] << " | ";
+
+	cout << setw(10) << left << rute0[pilih - 1][2] << " | ";
+
+	cout << setw(11) << left << rute0[pilih - 1][3] << " | ";
+
+	cout << setw(14) << left << rute0[pilih - 1][4] << " | ";
+
+	cout << setw(5) << left << rute1[pilih - 1][0] << " | ";
+
+	cout << setw(11) << left << rute1[pilih - 1][1] << " |" << endl;
+
+	cout << "+----+----------------+---------------+------------+-------------+----------------+-------+-------------+" << endl;
+
+	cout << "Masukkan tujuan : "; cin >> tuj;
+
+	cout << "Keberangkatan : "; cin >> ber;
+
+	cout << "Kedatangan : "; cin >> samp;
+
+	cout << "Kelas : "; cin >> kel;
+
+	cout << "Kereta : "; cin >> reta;
+
+	cout << "Jumlah kursi : "; cin >> kur;
+
+	cout << "Harga : "; cin >> har;
+
+	cout << endl;
+
+	cout << "Apakah anda yakin untuk Update...?? Ya(y) / Tidak(T) "; cin >> ip;
+
+	if (ip == 'y' || ip == 'Y')
+
+	{
+
+		rute0[pilih - 1][0] = tuj;
+
+		rute0[pilih - 1][1] = ber;
+
+		rute0[pilih - 1][2] = samp;
+
+		rute0[pilih - 1][3] = kel;
+
+		rute0[pilih - 1][4] = reta;
+
+		rute1[pilih - 1][0] = kur;
+
+		rute1[pilih - 1][1] = har;
+
+		system("CLS");
+
+	}
+
+	else if (ip == 't' || ip == 'T')
+
+	{
+
+		tuj = "";
+
+		ber = "";
+
+		samp = "";
+
+		kel = "";
+
+		reta = "";
+
+		kur = 0;
+
+		har = 0;
+
+		system("CLS");
+
+	}
+
+}
+
+//fungsi untuk menu admin
+
+void admn()
+
+{
+
+pertama:
+
+	char pil, pil2;
+
+	cout << "+---------------+" << endl;
+
+	cout << "| Sebagai Admin |" << endl;
+
+	cout << "+---------------+" << endl;
+
+	cout << "1.Update rute" << endl;
+
+	cout << "2.Terjual" << endl;
+
+	cout << "3.Keluar" << endl;
+
+	//cout << "4.Tambahkan rute" << endl;
+
+	cin >> pil;
+
+	//bagian ketika admin memilih update data
+
+	if (pil == '1')
+
+	{
+
+		updt();
+
+		system("CLS");
+
+		goto pertama;
+
+	}
+
+	//bagian ketika admin memilih untuk melihat tiket yang terjual
+
+	else if (pil == '2')
+
+	{
+
+		rutjual();
+
+		system("CLS");
+
+		goto pertama;
+
+	}
+
+	else if (pil == '3')
+
+	{
+
+
+
+	}
+
+	/*else if (pil == '4')
+
+	  {
+
+		  tambah();
+
+		  goto pertama;
+
+	  }*/
+
+	else
+
+	{
+
+		cout << "Pilihan anda tidak tersedia" << endl;
+
+		cout << "Tekan apasaja untuk kembali" << endl;
+
+		cout << "Balik ke awal (A)" << endl;
+
+		cin >> pil2;
+
+		if (pil2 == 'a' || pil2 == 'A')
+
+		{
+
+			
+
+		}
+
+		else
+
+		{
+
+			goto pertama;
+
+		}
+
+	}
+
+}
+
+//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest
+
+//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest//bagian guest
+
+void gs()
+
+{
+
+per:
+
+	string nama, hp;
+
+	char tt, l;
+
+	int i = 0, a, ding;
+
+	while (pembeli0[i][0] != "")
+
+	{
+
+		i++;
+
+	}
+
+	//bagian untuk memasukkan data diri 
+
+	system("cls");
+
+	cout << "Sebagai Pembeli" << endl;
+
+	cout << "Masukkan data diri :" << endl;
+
+	cout << "Nama : "; cin >> nama;
+
+	cout << "Nomor Tlp. : "; cin >> hp;
+
+	cout << "Apakah data diri anda benar???(y)/(t)"; cin >> tt;
+
+	if (tt == 'y' || tt == 'Y')
+
+	{
+
+	bal:
+
+		//bagian untuk melakukan pemesanan
+
+		system("CLS");
+
+		tampilgs();
+
+		cout << "Pilih nomer rute yang dibeli : "; cin >> a;
+
+		cout << "kursi dipilihkan secara urut" << endl;
+
+		cout << "Jumlah kursi :"; cin >> ding;
+
+		cout << "Apakah anda sudah yakin dan lanjut..?(y)(t)"; cin >> l;
+
+		system("cls");
+
+		if (l == 'y' || l == 'Y')
+
+		{
+
+			if (rute1[a - 1][0] >= ding)
+
+			{
+
+			ulang:
+
+				//bagian untuk melakukan pembayaran
+
+				int bayr, tot, kembali;
+
+				tot = ding * rute1[a - 1][1];
+
+				cout << "Pembayaran" << endl;
+
+				cout << "Maka total yang harus dibayar : Rp." << tot << endl;
+
+				cout << "Masukkan nominal pembayaran anda Rp."; cin >> bayr;
+
+				kembali = bayr - tot;
+
+				//bagian jika pembayaran kurang
+
+				if (tot > bayr)
+
+				{
+
+					system("cls");
+
+					char op;
+
+					cout << "Maaf uang anda kurang " << endl;
+
+					cout << "Ulangi pembayaran klik apa saja.."; cin >> op;
+
+					if (op == 'y')
+
+					{
+
+						goto ulang;
+
+					}
+
+				}
+
+				//bagian jika pembayaran berhasil dan mencetak struk nota
+
+				else
+
+				{
+
+					system("CLS");
+
+					cout << "Terimakasih" << endl;
+
+					cout << "Maka kembalian anda Rp." << kembali << endl;
+
+					ofstream cetakfile;
+
+					cetakfile.open("Notatiket.txt", ios::trunc);
+
+					cetakfile << "	 +-----------------------+" << endl;
+
+					cetakfile << "	 | Nota Pembayaran Tiket |" << endl;
+
+					cetakfile << "	 +-----------------------+" << endl;
+
+					cetakfile << setw(8) << left << "  Nama" << " : " << nama << endl;
+
+					cetakfile << setw(8) << left << "  Nim" << " : " << hp << endl;
+
+					cetakfile << setw(8) << left << "  Kode pembayaran" << " : SP" << rute1[i][2] << ding << rute1[i][0] << i + 1 << endl;
+
+					for (int b = 0; b < ding; b++)
+
+					{
+
+						cetakfile << "          +-------+" << endl;
+
+						cetakfile << "          | Tiket |" << endl;
+
+						cetakfile << "          +-------+" << endl;
+
+						cetakfile << "+---------------------------+" << endl;
+
+						cetakfile << "| " << setw(15) << left << "Tiket " << setw(10) << left << b + 1 << " | " << endl;
+
+						cetakfile << "| " << setw(15) << left << "Tujuan " << setw(10) << left << rute0[a - 1][0] << " | " << endl;
+
+						cetakfile << "| " << setw(15) << left << "Berangkat " << setw(10) << left << rute0[a - 1][1] << " | " << endl;
+
+						cetakfile << "| " << setw(15) << left << "Sampai " << setw(10) << left << rute0[a - 1][2] << " | " << endl;
+
+						cetakfile << "| " << setw(15) << left << "Kelas " << setw(10) << left << rute0[a - 1][3] << " | " << endl;
+
+						cetakfile << "| " << setw(15) << left << "Kereta Api " << setw(10) << left << rute0[a - 1][4] << " | " << endl;
+
+						cetakfile << "| " << setw(15) << left << "Nomor kursi " << setw(10) << left << rute1[a - 1][2] + (b + 1) << " | " << endl;
+
+						cetakfile << "+---------------------------+" << endl;
+
+					}
+
+					cetakfile << endl;
+
+					cetakfile.close();
+
+					rute1[a - 1][2] = ding + rute1[a - 1][2];
+
+					char p;
+
+					cout << "Klik apasaja untuk keluar"; cin >> p;
+
+					if (p == 'y' || p == 'Y')
+
+					{
+
+
+
+					}
+
+					else
+
+					{
+
+
+
+					}
+
+
+
+				}
+
+			}
+
+			//bagian ketika pesanan dengan tiket yang tidak cukup atau tiket habis
+
+			else
+
+			{
+
+				system("CLS");
+
+				char it;
+
+				cout << "Tiket habis" << endl;
+
+				cout << "Klik y untuk memilih ulang atau t untuk cancel"; cin >> it;
+
+				if (it == 'y' || it == 'Y')
+
+				{
+
+					goto bal;
+
+				}
+
+				else if (it == 't' || it == 'T')
+
+				{
+
+
+
+				}
+
+			}
+
+		}
+
+		else if (l == 't' || l == 'T')
+
+		{
+
+			goto per;
+
+		}
+
+		else if (tt == 't' || tt == 'T')
+
+		{
+
+			goto per;
+
+		}
+
+	}
+
+}
+
+//program utama
+
+int main()
+
+{
+
+awal:
+
+	system("CLS");
+
+	char pilih, op1, op2;
+
+	string pass = "12345";
+
+	string sand;
+
+	cout << "Program Tiket Kereta Api" << endl;
+
+	cout << "Login sebagai : " << endl;
+
+	cout << "1.Admin" << endl;
+
+	cout << "2.Guest" << endl;
+
+	cout << "3.Keluar" << endl;
+
+	cin >> pilih;
+
+	//bagian ketika user memilih admin
+
+	if (pilih == '1')
+
+	{
+
+	ulang:
+
+		//bagian ketika memasukkan sandi dengan benar
+
+		system("CLS");
+
+		cout << "Masukkan Sandi" << endl;
+
+		/*char hid = getch();
+
+		while (hid != '\r')
+
+		{
+
+			cout << "*";
+
+			pass += hid;
+
+			hid = getch();
+
+		}*/
+
+		cin >> sand;
+
+		if (sand == pass)
+
+		{
+
+			system("CLS");
+
+			admn();
+
+			goto awal;
+
+		}
+
+		//bagian ketika sandi yang dimasukkan mengalami kesalahan
+
+		else
+
+		{
+
+			system("CLS");
+
+			cout << "Sandi yang anda gunakan salah" << endl;
+
+			cout << " apakah anda ingin mengulang" << endl;
+
+			cin >> op1;
+
+			if (op1 == 'y' || op1 == 'Y')
+
+			{
+
+				goto ulang;
+
+			}
+
+			else if (op1 == 't' || op1 == 'T')
+
+			{
+
+				goto awal;
+
+			}
+
+			else
+
+			{
+
+				goto akhir;
+
+			}
+
+		}
+
+	}
+
+	//bagian ketika user memilih guest
+
+	else if (pilih == '2')
+
+	{
+
+		gs();
+
+		goto awal;
+
+	}
+
+	//bagian ketika user ingin keluar
+
+	else if (pilih == '3')
+
+	{
+
+		goto akhir;
+
+	}
+
+	//bagian ketika user salah memasukkan pilihan
+
+	else 
+
+	{
+
+		system("CLS");
+
+		cout << "Apakah anda yakin ingin keluar??(y)/(t)"; cin >> op2;
+
+		if (op2 == 'y' || op2 == 'Y')
+
+		{
+
+			goto akhir;
+
+		}
+
+		else if (op2 == 't' || op2 == 'T')
+
+		{
+
+			goto awal;
+
+		}
+
+	}
+
+akhir:
+
+	system("CLS");
+
+	return 0;
+
+}
