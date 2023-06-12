@@ -1,0 +1,350 @@
+#include <iostream>
+#include <fstream>
+#include <ctime>
+#include <iostream>
+#include <windows.h>
+#include <string>
+#include <algorithm>
+#include <fstream>
+#pragma warning (disable:4996)
+
+using namespace std;
+
+// Struktur data untuk menu makanan dan minuman
+struct MenuItem {
+    string name;
+    int stock;
+    double price;
+    string ukuran;
+};
+
+// Fungsi untuk mencetak tanggal dan waktu saat ini
+
+string getCurrentDateTime() {
+    time_t now = time(0);
+    char* dt = ctime(&now);
+    return dt;
+}
+
+
+// Fungsi untuk menambahkan menu baru
+void addMenu(MenuItem menus[], int& numMenus) {
+    string name;
+    int stock;
+    double price;
+    string ukuran;
+
+    cout << "Masukkan nama menu: ";
+    cin >> name;
+    cout << "Masukkan stok menu: ";
+    cin >> stock;
+    cout << "Masukkan harga menu: ";
+    cin >> price;
+    cout << "Masukkan ukuran:";
+    cin >> ukuran;
+
+    menus[numMenus].name = name;
+    menus[numMenus].stock = stock;
+    menus[numMenus].price = price;
+    menus[numMenus].ukuran = ukuran;
+
+    numMenus++;
+
+    cout << "Menu berhasil ditambahkan!" << endl;
+}
+
+// Fungsi untuk melihat semua menu
+void viewMenu(MenuItem menus[], int numMenus) {
+    cout << "Daftar Menu:" << endl;
+    for (int i = 0; i < numMenus; i++) {
+        cout << "Nama: " << menus[i].name << endl;
+        cout << "Stok: " << menus[i].stock << endl;
+        cout << "Harga: " << menus[i].price << endl;
+        cout << "Ukuran: " << menus[i].ukuran << endl;
+        cout << endl;
+    }
+}
+
+// Fungsi untuk mengubah menu
+void updateMenu(MenuItem menus[], int numMenus) {
+    string name;
+    int stock;
+    double price;
+
+    cout << "Masukkan nama menu yang ingin diubah: ";
+    cin >> name;
+
+    bool menuFound = false;
+    int menuIndex;
+
+    for (int i = 0; i < numMenus; i++) {
+        if (menus[i].name == name) {
+            menuFound = true;
+            menuIndex = i;
+            break;
+        }
+    }
+
+    if (menuFound) {
+        cout << "Masukkan stok baru: ";
+        cin >> stock;
+        cout << "Masukkan harga baru: ";
+        cin >> price;
+
+        menus[menuIndex].stock = stock;
+        menus[menuIndex].price = price;
+
+        cout << "Menu berhasil diubah!" << endl;
+    }
+    else {
+        cout << "Menu tidak ditemukan!" << endl;
+    }
+}
+
+// Fungsi untuk menghapus menu
+void deleteMenu(MenuItem menus[], int& numMenus) {
+    string name;
+
+    cout << "Masukkan nama menu yang ingin dihapus: ";
+    cin >> name;
+
+    bool menuFound = false;
+    int menuIndex;
+
+    for (int i = 0; i < numMenus; i++) {
+        if (menus[i].name == name) {
+            menuFound = true;
+            menuIndex = i;
+            break;
+        }
+    }
+
+    if (menuFound) {
+        // Menggeser menu lainnya untuk mengisi posisi yang dihapus
+        for (int i = menuIndex; i < numMenus - 1; i++) {
+            menus[i] = menus[i + 1];
+        }
+
+        numMenus--;
+
+        cout << "Menu berhasil dihapus!" << endl;
+    }
+    else {
+        cout << "Menu tidak ditemukan!" << endl;
+    }
+}
+
+// Fungsi untuk membeli makanan atau minuman
+void buyMenu(MenuItem menus[], int numMenus) {
+    string name;
+    int quantity;
+
+    cout << "Masukkan nama menu yang ingin dibeli: ";
+    cin >> name;
+    cout << "Masukkan jumlah yang ingin dibeli: ";
+    cin >> quantity;
+
+    bool menuFound = false;
+    int menuIndex;
+
+    for (int i = 0; i < numMenus; i++) {
+        if (menus[i].name == name) {
+            menuFound = true;
+            menuIndex = i;
+            break;
+        }
+    }
+
+    if (menuFound) {
+        if (menus[menuIndex].stock >= quantity) {
+            double totalPrice = menus[menuIndex].price * quantity;
+            menus[menuIndex].stock -= quantity;
+
+            // Menyimpan informasi transaksi ke file .bt
+            ofstream outfile;
+            outfile.open("pesanan.bt", ios_base::app);
+            outfile << "Nama Menu: " << menus[menuIndex].name << endl;
+            outfile << "Jumlah: " << quantity << endl;
+            outfile << "Total Harga: " << totalPrice << endl;
+            //outfile << "Tanggal dan Waktu: " << getCurrentDateTime() << endl;
+            outfile << endl;
+            outfile.close();
+
+            cout << "Pembelian berhasil!" << endl;
+            cout << "Nama Menu: " << menus[menuIndex].name << endl;
+            cout << "Jumlah: " << quantity << endl;
+            cout << "Total Harga: " << totalPrice << endl;
+        }
+        else {
+            cout << "Stok tidak mencukupi!" << endl;
+        }
+    }
+    else {
+        cout << "Menu tidak ditemukan!" << endl;
+    }
+}
+
+// Fungsi untuk mencetak laporan penjualan
+void printSalesReport(MenuItem menus[], int numMenus) {
+    double totalProfit = 0;
+
+    for (int i = 0; i < numMenus; i++) {
+        double menuProfit = (menus[i].stock * menus[i].price);
+        totalProfit += menuProfit;
+    }
+
+    // Menyimpan laporan penjualan ke file .txt
+    ofstream outfile;
+    outfile.open("laporan_penjualan.txt", ios_base::app);
+    outfile << "Laporan Penjualan Restoran" << endl;
+    //outfile << "Tanggal Cetak: " << getCurrentDateTime() << endl;
+    outfile << "Total Keuntungan: " << totalProfit << endl;
+    outfile << endl;
+    outfile.close();
+
+    cout << "Laporan penjualan telah dicetak!" << endl;
+}
+
+int main() {
+    const string ADMIN_USERNAME = "admin";
+    const string ADMIN_PASSWORD = "admin123";
+    const string SUPERADMIN_USERNAME = "superadmin";
+    const string SUPERADMIN_PASSWORD = "superadmin123";
+
+    // Inisialisasi menu
+    const int MAX_MENU = 100;
+    MenuItem menus[MAX_MENU];
+    int numMenus = 0;
+
+    int option;
+    string username, password;
+
+    while (true) 
+    {
+        cout << "Selamat datang di Restoran XYZ" << endl;
+        cout << "1. Login Admin" << endl;
+        cout << "2. Login Super Admin" << endl;
+        cout << "3. User" << endl;
+        cout << "4. Keluar" << endl;
+        cout << "Pilih opsi: ";
+        cin >> option;
+
+        if (option == 1) {
+            cout << "Masukkan username: ";
+            cin >> username;
+            cout << "Masukkan password: ";
+            cin >> password;
+
+            if (username == ADMIN_USERNAME && password == ADMIN_PASSWORD) {
+                system("cls");
+                while (true) {
+                    cout << "Selamat datang, Admin!" << endl;
+                    cout << "1. Tambah Menu" << endl;
+                    cout << "2. Lihat Menu" << endl;
+                    cout << "3. Ubah Menu" << endl;
+                    cout << "4. Hapus Menu" << endl;
+                    cout << "5. Kembali" << endl;
+                    cout << "Pilih opsi: ";
+                    cin >> option;
+
+                    if (option == 1) {
+                        system("cls");
+                        addMenu(menus, numMenus);
+                    }
+                    else if (option == 2) {
+                        system("cls");
+                        viewMenu(menus, numMenus);
+                    }
+                    else if (option == 3) {
+                        system("cls");
+                        updateMenu(menus, numMenus);
+                    }
+                    else if (option == 4) {
+                        system("cls");
+                        deleteMenu(menus, numMenus);
+                    }
+                    else if (option == 5) {
+                        system("cls");
+                        break;
+                    }
+                    else {
+                        cout << "Opsi tidak valid!" << endl;
+                    }
+                }
+            }
+            else {
+                cout << "Username atau password salah!" << endl;
+            }
+        }
+        else if (option == 2) {
+            cout << "Masukkan username: ";
+            cin >> username;
+            cout << "Masukkan password: ";
+            cin >> password;
+
+            if (username == SUPERADMIN_USERNAME && password == SUPERADMIN_PASSWORD) {
+                system("cls");
+                while (true) {
+                    cout << "Selamat datang, Super Admin!" << endl;
+                    cout << "1. Laporan Penjualan" << endl;
+                    cout << "2. Kembali" << endl;
+                    cout << "Pilih opsi: ";
+                    cin >> option;
+
+                    if (option == 1) {
+                        system("cls");
+                        printSalesReport(menus, numMenus);
+                    }
+                    else if (option == 2) {
+                        system("cls");
+                        break;
+                    }
+                    else {
+                        cout << "Opsi tidak valid!" << endl;
+                    }
+                }
+            }
+            else {
+                cout << "Username atau password salah!" << endl;
+            }
+        }
+        else if (option == 3) {
+            system("cls");
+            while (true) {
+                cout << "Selamat datang, User!" << endl;
+                cout << "1. Lihat Menu" << endl;
+                cout << "2. Beli Menu" << endl;
+                cout << "3. Kembali" << endl;
+                cout << "Pilih opsi: ";
+                cin >> option;
+
+                if (option == 1) {
+                    system("cls");
+
+                    viewMenu(menus, numMenus);
+                }
+                else if (option == 2) {
+                    system("cls");
+                    buyMenu(menus, numMenus);
+                }
+                else if (option == 3) {
+                    system("cls");
+
+                    break;
+                }
+                else {
+                    cout << "Opsi tidak valid!" << endl;
+                }
+            }
+        }
+        else if (option == 4) {
+            system("cls");
+            break;
+        }
+        else {
+            cout << "Opsi tidak valid!" << endl;
+        }
+    }
+
+    return 0;
+}
