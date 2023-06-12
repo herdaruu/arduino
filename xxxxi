@@ -1,0 +1,958 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <conio.h>
+
+
+using namespace std;
+
+//Dekklarasi variabel yang dibutuhkan
+//variabel untuk login
+string input, pass;
+string direktur = "abc", passd = "123"; //direktur
+string admin = "111", passa = "111";//admin
+
+bool pasti, login, direktur11, admin11, laporan;
+int tiket_dewasa, tiket_anak, totaldewasa[3], totalanak[3], gabung[3], totaluang[3];
+int x, y, z;   // untuk menyimpan inputan user (film, hari,jadwal)
+int kursi_dipesan_D[10];
+int kursi_dipesan_A[10];
+int totalsemua, donasi;
+int pemesan1;
+int pemesan2;
+string daftar_film[3]
+{
+	"A Man Called Otto", "KKN Desa Penari", "Fast X"
+};
+
+string jadwal_tayang[2]
+{
+	"14:00", "17:00"
+};
+
+string nama_hari[3]
+{
+	"Jumat",
+	"Sabtu",
+	"Minggu"
+};
+
+int hargatiket[4]
+{
+	45000,55000,35000,40000
+};
+
+// jadi setiap jadwal atau hari akan memiliki data kursi yang berbeda
+struct susunan
+{
+	string wayah;
+	char kursi[10];
+	int kursi_tersedia = 10;
+	int total_dewasa; // total tiket dewasa
+	int total_anak;  // total tiket dewasa
+
+};
+
+struct waktu
+{
+	string hari;
+	susunan jadwal[2];
+	int total;
+};
+
+struct CGV
+{
+	string judul;
+	waktu day[3];
+};
+
+CGV film[3];
+
+
+
+
+//untuk memasukan data data awal ke struct
+void masuk_dataawal();
+
+// untuk display menu awal setelah login admin langsung menampilkan list film
+void tampilan_film();
+
+//untuk menampilakn list hari / jadwal
+void tampilan_hari();
+
+// untuk menampilkan waktu tayang
+void tampilan_jadwal();
+
+//untuk menampilkan layout kursi yang tersedia 
+void layout_kursi(int a, int b, int c);
+
+//untuk display pemilihan kursi
+void tampilan_kursi();
+
+// untuk menampilkan rincian pemesanan
+void semua();
+
+//untuk mencetak tiket
+void cetak_tiket(int a, int x, int y, int z);
+
+void memasukkankeuangan();
+
+void tampilan_direktur();
+
+void sebelumlogin();
+
+void tampilan_login();
+
+void tampilan_awaldirektur();
+
+void cetak_laporan();
+
+int main()
+{
+	int a = 0;
+	char yt;
+login1:
+	input = pass = "";
+	sebelumlogin();
+	if (login == false)
+	{
+		goto akhir;
+	}
+	system("CLS");
+	tampilan_login();
+	system("CLS");
+	if (direktur11 == true && admin11 == false)
+	{
+	alo:
+		masuk_dataawal();
+		tampilan_awaldirektur();
+		if (laporan == true)
+		{
+			memasukkankeuangan();
+			tampilan_direktur();
+			cetak_laporan();
+		halo1:
+			cout << "\n\nkemenu sebelumnya ? (y/t): ";
+			cin >> yt;
+			if (yt == 'y' || yt == 'Y')
+			{
+				system("CLS");
+				goto alo;
+			}
+			else if (yt == 't' || yt == 'T')
+			{
+				goto akhir;
+			}
+			else
+			{
+				system("CLS");
+				cout << "\n\n Maaf input anda tidak valid\n";
+				goto halo1;
+			}
+
+		}
+		else
+		{
+			system("CLS");
+			goto login1;
+		}
+	}
+	else if (direktur11 == false && admin11 == true)
+	{
+		system("CLS");
+	awal:
+		pemesan1 = pemesan2 = 0;
+		tampilan_film();
+		if (pasti == false)
+		{
+			system("CLS");
+			goto login1;
+		}
+		tampilan_hari();
+		if (pasti == false)
+		{
+			goto awal;
+		}
+		tampilan_jadwal();
+		if (pasti == false)
+		{
+			goto awal;
+		}
+		tampilan_kursi();
+		semua();
+		cetak_tiket(a, x, y, z);
+		a++;
+
+	halo:
+		cout << "\n\nApakah anda ingin memesan tiket film lagi atau kemenu login ? (y/t): ";
+		cin >> yt;
+		if (yt == 'y' || yt == 'Y')
+		{
+			system("CLS");
+			tiket_anak = tiket_dewasa = 0;
+			goto awal;
+		}
+		else if (yt == 't' || yt == 'T')
+		{
+			goto login1;
+		}
+		else
+		{
+			cout << "\n\n Maaf input anda tidak valid\n";
+			goto halo;
+		}
+	}
+
+akhir:
+	return 0;
+}
+
+void masuk_dataawal()
+{
+	for (int k = 0; k < 3; k++)
+	{
+		film[k].judul = daftar_film[k];
+		//cout <<k+1 << ". Judul :" << film[k].judul << ": \n";
+		for (int i = 0; i < 3; i++)
+		{
+			film[k].day[i].hari = nama_hari[i];
+			//cout <<setw(5)<<right<< i + 1 << ". hari :" << film[k].day[i].hari << ": \n";
+			for (int j = 0; j < 2; j++)
+			{
+				film[k].day[j].jadwal[j].wayah = jadwal_tayang[j];
+				//cout << setw(20)<<right<< j + 1 << ". pukul :" << film[k].day[j].jadwal[j].wayah<<endl;
+			}
+			//cout << endl;
+		}
+		//cout << endl;
+	}
+}
+
+void sebelumlogin()
+{
+	int menu;
+awal:
+	cout << "======================================================" << endl;
+	cout << "             PROGRAM PEMESANAN TIKET BIOSKOP          " << endl;
+	cout << "======================================================" << endl;
+	cout << "= 1. Login" << endl;
+	cout << "= 2. Keluar" << endl;
+	cout << "======================================================" << endl;
+	cout << " Pilih Menu : ";
+	cin >> menu;
+	//Error handling
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+	else
+	{
+		if (menu == 1)
+		{
+			login = true;
+			system("CLS");
+		}
+		else if (menu == 2)
+		{
+			login = false;
+		}
+		else
+		{
+			system("CLS");
+			cout << "Maaf Input anda tidak valid\n";
+			cout << "Silahkan pilih lagi dengan benar \n\n";
+			goto awal;
+		}
+	}
+}
+
+void tampilan_login()
+{
+	char password;
+login:
+	cout << "======================================================" << endl;
+	cout << "             PROGRAM PEMESANAN TIKET BIOSKOP          " << endl;
+	cout << "======================================================" << endl;
+	cout << "=                     Log in User                    =" << endl;
+	cout << "======================================================" << endl;
+	cout << "= Masukkan Username : ";
+	cin >> input;
+	cout << "======================================================" << endl;
+	cout << "= Masukkan Password : ";
+
+	// program menyembunyikan karakter di terminal untuk password
+	while (true)
+	{
+		password = _getch();   // agar input tidak ditampikan di terminal
+
+
+		if (password == '\r')  //  \r itu merpukan tombol enter pada keyborad
+		{
+			break;
+		}
+		else if (password == '\b') // \b merupakan tombol backspace
+		{
+			if (pass.length() > 0)
+			{
+				pass.pop_back(); //untuk menghapus karakter terakhir
+				cout << "\b \b";
+			}
+
+		}
+		else
+		{
+			pass.push_back(password); //setiap char yang dimasukkan atau diinputkan akan dipindahkan ke variabel pass
+			cout << "*";
+		}
+
+
+	}
+	cout << "\n======================================================" << endl;
+
+	if (input == direktur)
+	{
+		if (pass == passd)
+		{
+			direktur11 = true;
+			admin11 = false;
+			cout << "= Login berhasil \n";
+			//goto lanjut;
+		}
+		else
+		{
+			system("CLS");
+			cout << " Maaf username atau password salah \n";
+			cout << " Silahkan masukkan username dan password lagi  \n\n\n";
+			goto login;
+		}
+	}
+	else if (input == admin)
+	{
+		if (pass == passa)
+		{
+			direktur11 = false;
+			admin11 = true;
+			cout << "= Login berhasil \n";
+			//goto lanjut;
+		}
+		else
+		{
+			system("CLS");
+			cout << " Maaf username atau password salah \n";
+			cout << " Silahkan masukkan username dan password lagi  \n\n\n";
+			goto login;
+		}
+	}
+	else
+	{
+		system("CLS");
+		cout << " Maaf username atau password salah \n";
+		cout << " Silahkan masukkan username dan password lagi  \n\n\n";
+		goto login;
+	}
+
+}
+
+void tampilan_film()
+{
+	masuk_dataawal();
+	int pilih_film;
+awal:
+	cout << "======================================================" << endl;
+	cout << "             PROGRAM PEMESANAN TIKET BIOSKOP          " << endl;
+	cout << "======================================================" << endl;
+	//cout << "= " << endl;
+	//cout << "= Saldo : Rp" << E_pay << endl;
+	//cout << "======================================================" << endl;
+	cout << "=              Film yang sedang tayang               =" << endl;
+	cout << "======================================================" << endl;
+	cout << "= 1. " << film[0].judul << endl;
+	cout << "= 2. " << film[1].judul << endl;
+	cout << "= 3. " << film[2].judul << endl;
+	cout << "= 9. Keluar" << endl;
+	cout << "======================================================" << endl;
+	cout << " Pilih Film : ";
+	cin >> pilih_film;
+
+	// program eror handling jika input tidak sesuai dengan tipe data int 
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+	else
+	{
+		if (pilih_film != 9)
+		{
+			pasti = true;
+			if (pilih_film > 0 && pilih_film < 4)
+			{
+				x = pilih_film - 1;
+			}
+			else
+			{
+				system("CLS");
+				cout << "Maaf Input anda tidak valid\n";
+				cout << "Silahkan pilih lagi dengan benar \n\n";
+				goto awal;
+			}
+		}
+		else
+		{
+			pasti = false;
+		}
+	}
+
+
+}
+
+void tampilan_hari()
+{
+	system("CLS");
+	int pilih_hari, hargatertampil;
+awal:
+	cout << "==========================================================================" << endl;
+	cout << "                       PROGRAM PEMESANAN TIKET BIOSKOP                    " << endl;
+	cout << "==========================================================================" << endl;
+	cout << "= Film : " << film[x].judul << endl;
+	cout << "==========================================================================" << endl;
+	cout << "=                               Pilih Jadwal                             =" << endl;
+	cout << "==========================================================================" << endl;
+	for (int i = 0; i < 3; i++)
+	{
+		cout << "= " << i + 1 << ". " << setw(15) << left << film[x].day[i].hari << endl;
+	}
+	cout << "==========================================================================" << endl;
+	cout << "  Daftar harga tiket : \n";
+	cout << setw(5) << right << " " << "Hari biasa  ";
+	cout << setw(33) << right << ": Orang Dewasa" << setw(7) << "Rp" << hargatiket[0] << "   per tiket" << endl;
+	cout << setw(47) << right << " Anak-anak" << setw(10) << "Rp" << hargatiket[2] << "   per tiket\n" << endl;
+	cout << setw(5) << right << " " << "Hari Sabtu / Minggu (Weekend)  :";
+	cout << setw(13) << right << "Orang Dewasa" << setw(7) << "Rp" << hargatiket[1] << "   per tiket" << endl;
+	cout << setw(47) << right << " Anak-anak" << setw(10) << "Rp" << hargatiket[3] << "   per tiket\n" << endl;
+	cout << "==========================================================================" << endl;
+	cout << "= ketik 9 untuk Kembali ke menu film\n";
+	cout << "==========================================================================" << endl;
+	cout << " Pilih Hari: ";
+	cin >> pilih_hari;
+
+
+	//Error handling
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+	else
+	{
+		if (pilih_hari != 9)
+		{
+			pasti = true;
+			if (pilih_hari > 0 && pilih_hari < 4)
+			{
+				y = pilih_hari - 1;
+				goto akhir;
+			}
+			else
+			{
+				system("CLS");
+				cout << "Maaf Input anda tidak valid\n";
+				cout << "Silahkan pilih lagi dengan benar \n\n";
+				goto awal;
+			}
+		}
+		else
+		{
+			pasti = false;
+		}
+	}
+akhir:
+	system("CLS");
+}
+
+void tampilan_jadwal()
+{
+	int pilih_jam;
+awal:
+	cout << "======================================================" << endl;
+	cout << "             PROGRAM PEMESANAN TIKET BIOSKOP          " << endl;
+	cout << "======================================================" << endl;
+	cout << "= Film : " << film[x].judul << endl;
+	cout << "======================================================" << endl;
+	cout << "=                    Pilih Jadwal                    =" << endl;
+	cout << "======================================================" << endl;
+	cout << "= Hari    : " << film[x].day[y].hari << endl;
+	cout << "= Tanggal : " << y + 14 << " April 2023" << endl;
+	cout << "======================================================" << endl;
+	for (int i = 0; i < 2; i++)
+	{
+		cout << "= " << i + 1 << ". Pukul " << jadwal_tayang[i] << endl;
+	}
+	cout << "======================================================" << endl;
+	cout << "= ketik 9 untuk Kembali ke menu film\n";
+	cout << "======================================================" << endl;
+	cout << " Pilih jadwal : ";
+	cin >> pilih_jam;
+
+	//error handling
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+	else
+	{
+		if (pilih_jam != 9)
+		{
+			pasti = true;
+			if (pilih_jam > 0 && pilih_jam < 4)
+			{
+
+				z = pilih_jam - 1;
+				film[x].day[y].jadwal[z].wayah = jadwal_tayang[z];
+			}
+			else
+			{
+				system("CLS");
+				cout << "Maaf Input anda tidak valid\n";
+				cout << "Silahkan pilih lagi dengan benar \n\n";
+				goto awal;
+			}
+		}
+		else
+		{
+			pasti = false;
+		}
+	}
+	system("CLS");
+}
+
+void layout_kursi(int a, int b, int c)
+{
+	for (int i = 0; i < 10; i++) {
+		if (film[a].day[b].jadwal[c].kursi[i] == 'X') {
+			cout << setw(4) << right << "X" << " ";
+		}
+		else {
+			cout << setw(4) << right << i + 1;
+		}
+
+
+	}
+	cout << endl;
+}
+
+void tampilan_kursi()
+{
+	int pilih_tiket, pilih_kursi;
+	int p, stock = 10;
+	cout << "======================================================" << endl;
+	cout << "             PROGRAM PEMESANAN TIKET BIOSKOP          " << endl;
+	cout << "======================================================" << endl;
+	cout << "= Film : " << film[x].judul << endl;
+	cout << "======================================================" << endl;
+	cout << "=                    Pilih Jadwal                    =" << endl;
+	cout << "======================================================" << endl;
+	cout << "= Hari    : " << film[x].day[y].hari << endl;
+	cout << "= Tanggal : " << y + 14 << " April 2023" << endl;
+	cout << "= Jam     : " << film[x].day[y].jadwal[z].wayah << endl;
+	cout << "======================================================" << endl;
+
+awal:
+	layout_kursi(x, y, z);
+	cout << "======================================================" << endl;
+	cout << " 1. Orang dewasa \n";
+	cout << " 2. Anak \n";
+	cout << "======================================================" << endl;
+	cout << " pilih yang mau dipesan  (1/2) : ";
+	cin >> pilih_tiket;
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+	else
+	{
+		if (pilih_tiket > 0 && pilih_tiket < 3)
+		{
+			goto next;
+		}
+		else
+		{
+			cout << "Maaf Input anda tidak valid\n";
+			cout << "Silahkan pilih lagi dengan benar \n\n";
+			goto awal;
+		}
+	}
+
+next:
+	cout << "======================================================" << endl;
+	cout << " Kursi yang tersedia : " << film[x].day[y].jadwal[z].kursi_tersedia << endl;
+	cout << " Jumlah tiket yang ingin dipesan       : ";
+	cin >> p;
+
+	//Eror handling
+	if (cin.fail())
+	{
+		//system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto next;
+
+	}
+	else
+	{
+		if (film[x].day[y].jadwal[z].kursi_tersedia > p)
+		{
+			if (p > 0 || p < 10)
+			{
+				film[x].day[y].jadwal[z].kursi_tersedia = 10 - p;
+				if (pilih_tiket == 1)
+				{
+					pemesan1 = pemesan1 + p;
+					film[x].day[y].jadwal[z].total_dewasa = film[x].day[y].jadwal[z].total_dewasa + p;
+				}
+				else if (pilih_tiket == 2)
+				{
+					pemesan2 = pemesan2 + p;
+					film[x].day[y].jadwal[z].total_anak = film[x].day[y].jadwal[z].total_anak + p;
+				}
+			}
+			else
+			{
+				cout << "Maaf Input anda tidak valid\n";
+				cout << "Silahkan input lagi dengan benar \n\n";
+				//layout_kursi(x,y,z);
+				goto next;
+			}
+		}
+
+		else
+		{
+			system("CLS");
+			cout << "Maaf Input anda tidak valid\n";
+			cout << "Silahkan input lagi dengan benar \n\n";
+			layout_kursi(x, y, z);
+			goto next;
+		}
+	}
+
+pilih:
+	cout << "======================================================" << endl;
+	cout << " Pilih kursi : \n";
+	for (int i = 0; i < p; i++) {
+		cout << "Kursi " << i + 1 << ": ";
+		cin >> pilih_kursi;
+
+		// error handling input untuk kursi 
+		// jika tidak sesuai maka akan mengulang input dari kursi yang input nya salah
+		if (cin.fail())
+		{
+			system("CLS");
+			cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+			cin.clear();  //untuk menghapus status error pada cin
+			cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+			goto pilih;
+
+		}
+		else
+		{
+			if (pilih_kursi < 0 || pilih_kursi > 11)
+			{
+				cout << "Maaf Input anda tidak valid\n";
+				cout << "Silahkan input lagi dengan benar \n\n";
+				i--;
+				goto pilih;
+			}
+			else
+			{
+				// Memeriksa apakah kursi tersedia atau tidak
+				if (film[x].day[y].jadwal[z].kursi[pilih_kursi - 1] == 'X')
+				{
+					cout << "Maaf, kursi sudah dipesan. Silakan pilih kursi yang lain." << endl;
+					i--;
+				}
+				else
+				{
+					if (pilih_tiket == 1)
+					{
+						kursi_dipesan_D[i] = pilih_kursi;
+					}
+					else if (pilih_tiket == 2)
+					{
+						kursi_dipesan_A[i] = pilih_kursi;
+					}
+					film[x].day[y].jadwal[z].kursi[pilih_kursi - 1] = 'X';
+				}
+			}
+
+		}
+
+	}
+	char yt;
+ulang:
+	cout << "\n\n Apakah Anda ingin memesan lagi (y/t)? : ";
+	cin >> yt;
+	if (yt == 'y' || yt == 'Y')
+	{
+		goto awal;
+	}
+	else if (yt == 't' || yt == 'T')
+	{
+		goto akhir;
+	}
+	else
+	{
+		system("CLS");
+		cout << "\n\n Maaf input anda tidak valid\n";
+		goto ulang;
+	}
+akhir:
+	system("CLS");
+}
+
+void semua()
+{
+	int nominal, selisih;
+	cout << "======================================================" << endl;
+	cout << "             PROGRAM PEMESANAN TIKET BIOSKOP          " << endl;
+	cout << "======================================================" << endl;
+	cout << "= Film : " << film[x].judul << endl;
+	cout << "======================================================" << endl;
+	cout << "=                      Pesanan                       =" << endl;
+	cout << "======================================================" << endl;
+	cout << "= Hari    : " << film[x].day[y].hari << endl;
+	cout << "= Tanggal : " << y + 14 << " April 2023" << endl;
+	cout << "= Jam     : " << film[x].day[y].jadwal[z].wayah << endl;
+	cout << "======================================================" << endl;
+	cout << "= Jumlah tiket yang dipesan       : " << endl;
+	cout << setw(8) << left << "Tiket dewasa : " << pemesan1 << endl;
+	cout << setw(8) << left << "Tiket anak   : " << pemesan2 << endl;
+	cout << endl;
+	cout << "Total Harga  \n" << endl;
+	int dewasa, anak;
+	if (y == 0)
+	{
+		dewasa = film[x].day[y].jadwal[z].total_dewasa * hargatiket[0];
+		anak = film[x].day[y].jadwal[z].total_anak * hargatiket[2];
+	}
+	else
+	{
+		dewasa = film[x].day[y].jadwal[z].total_dewasa * hargatiket[1];
+		anak = film[x].day[y].jadwal[z].total_anak * hargatiket[3];
+	}
+	int total_harga = anak + dewasa;
+	film[x].day[y].total = film[x].day[y].total + total_harga;
+	cout << "Tiket dewasa : Rp" << dewasa << endl;
+	cout << "Tiket anak   : Rp" << anak << endl;
+	cout << "-----------------------------------------------\n";
+ulang1:
+	cout << "Total        : Rp" << total_harga << endl;
+	cout << "======================================================" << endl;
+
+	cout << "	Silahkan Lakukan pembayaran \n ";
+	cout << "	Masukkan nominal uang : Rp";
+	cin >> nominal;
+	cout << "======================================================" << endl;
+	if (nominal >= total_harga)
+	{
+		selisih = nominal - total_harga;
+		if (selisih > 0)
+		{
+			cout << "Silahkan ambil kembalian anda : Rp" << selisih << endl;
+
+		}
+		else
+		{
+			cout << "Uang anda pas";
+		}
+
+	}
+	else
+	{
+		system("CLS");
+		cout << "Maaf uang anda kurang " << endl;
+		cout << "Masukkan nomial yang sesuai dengan harga\n\n";
+		goto ulang1;
+	}
+
+}
+
+void cetak_tiket(int a, int x, int y, int z)
+{
+	int* kode;
+	//untuk menampilkan harga
+	int dewasa, anak;
+	if (y == 0)
+	{
+		dewasa = hargatiket[0];
+		anak = hargatiket[2];
+	}
+	else
+	{
+		dewasa = hargatiket[1];
+		anak = hargatiket[3];
+	}
+	string jumlahpesanan = to_string(a + 1);
+	ofstream myfile;
+	myfile.open("Tiket " + jumlahpesanan + ".txt", ios::trunc);
+	for (int i = 0; i < film[x].day[y].jadwal[z].total_dewasa; i++)
+	{
+		kode = &kursi_dipesan_D[i];
+		myfile << "Bioskop                  |     Bioskop          \n";
+		myfile << "________|_______\n";
+		myfile << setw(25) << left << film[x].judul << "| " << film[x].judul << endl;
+		myfile << setw(7) << left << film[x].day[y].hari << " " << y + 10 << setw(15) << left << " April 2023" << "| Tanggal : " << setw(7) << left << film[x].day[y].hari << y + 10 << setw(15) << left << " April 2023" << endl;
+		myfile << setw(25) << left << film[x].day[y].jadwal[z].wayah << "| Time :" << film[x].day[y].jadwal[z].wayah << endl;
+		myfile << "Seat " << setw(20) << left << kursi_dipesan_D[i] << "|"  "Seat " << setw(20) << left << kursi_dipesan_D[i] << endl;
+		myfile << "Rp " << setw(22) << left << dewasa << "| Price : Rp" << dewasa << endl;
+		myfile << setw(25) << left << kode << "| " << kode << endl;
+
+	}
+	myfile << "\n\n\n\n";
+	for (int i = 0; i < film[x].day[y].jadwal[z].total_anak; i++)
+	{
+		kode = &kursi_dipesan_A[i];
+		myfile << "Bioskop                  |     Bioskop          \n";
+		myfile << "________|_______\n";
+		myfile << setw(25) << left << film[x].judul << "| " << film[x].judul << endl;
+		myfile << setw(7) << left << film[x].day[y].hari << " " << y + 10 << setw(15) << left << " April 2023" << "| Tanggal : " << setw(7) << left << film[x].day[y].hari << y + 10 << setw(15) << left << " April 2023" << endl;
+		myfile << setw(25) << left << film[x].day[y].jadwal[z].wayah << "| Time :" << film[x].day[y].jadwal[z].wayah << endl;
+		myfile << "Seat " << setw(20) << left << kursi_dipesan_A[i] << "|"  "Seat " << setw(20) << left << kursi_dipesan_A[i] << endl;
+		myfile << "Rp " << setw(22) << left << anak << "| Price : Rp" << anak << endl;
+		myfile << setw(25) << left << kode << "| " << kode << endl;
+		myfile << "\n\n";
+	}
+	myfile.close();
+
+
+}
+
+void memasukkankeuangan()
+{
+	int a, anaksementara, dewasasementara;
+	a = anaksementara = dewasasementara = 0;
+	//total hari jumat
+	for (a = 0; a < 3; a++)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			totaluang[a] = totaluang[a] + film[i].day[a].total;
+			for (int j = 0; j < 2; j++)
+			{
+
+				totalanak[a] = totalanak[a] + film[i].day[a].jadwal[j].total_anak;
+				totaldewasa[a] = totaldewasa[a] + film[i].day[a].jadwal[j].total_dewasa;
+			}
+		}
+		gabung[a] = totalanak[a] + totaldewasa[a];
+	}
+}
+
+void tampilan_direktur()
+{
+	int totaltiket;
+	cout << "=======================================================================================================================" << endl;
+	cout << "                                                        Laporan Keuangan                                               " << endl;
+	cout << "=======================================================================================================================" << endl;
+	cout << setw(25) << left << "Hari/tanggal" << setw(25) << left << "|Tiket Anak";
+	cout << setw(25) << left << "|Tiket Dewasa" << setw(25) << left << "|Total Tiket";
+	cout << setw(25) << left << "|Total Penghasilan" << endl;
+	cout << "-----------------------------------------------------------------------------------------------------------------------" << endl;
+	for (int i = 0; i < 3; i++)
+	{
+		cout << setw(8) << left << film[x].day[i].hari << i + 14 << " April 2023    " << setw(24) << right << totalanak[i] << "|";
+		cout << setw(24) << right << totaldewasa[i] << "|" << setw(25) << right << gabung[i];
+		cout << setw(3) << left << "|Rp" << setw(15) << right << totaluang[i] << endl;
+	}
+
+
+}
+
+void tampilan_awaldirektur()
+{
+	int menu;
+awal:
+	cout << "======================================================" << endl;
+	cout << "             PROGRAM PEMESANAN TIKET BIOSKOP          " << endl;
+	cout << "======================================================" << endl;
+	cout << "= 1. Laporan keuangan" << endl;
+	cout << "= 2. Keluar" << endl;
+	cout << "======================================================" << endl;
+	cout << " Pilih Menu : ";
+	cin >> menu;
+	//Error handling
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+	else
+	{
+		if (menu == 1)
+		{
+			laporan = true;
+			system("CLS");
+		}
+		else if (menu == 2)
+		{
+			laporan = false;
+		}
+		else
+		{
+			system("CLS");
+			cout << "Maaf Input anda tidak valid\n";
+			cout << "Silahkan pilih lagi dengan benar \n\n";
+			goto awal;
+		}
+	}
+}
+
+void cetak_laporan()
+{
+	ofstream myfile;
+	myfile.open("Laporan.txt", ios::trunc);
+	int totaltiket;
+	myfile << "=======================================================================================================================" << endl;
+	myfile << "                                                        Laporan Keuangan                                               " << endl;
+	myfile << "=======================================================================================================================" << endl;
+	myfile << setw(25) << left << "Hari/tanggal" << setw(25) << left << "|Tiket Anak";
+	myfile << setw(25) << left << "|Tiket Dewasa" << setw(25) << left << "|Total Tiket";
+	myfile << setw(25) << left << "|Total Penghasilan" << endl;
+	myfile << "-----------------------------------------------------------------------------------------------------------------------" << endl;
+
+	for (int i = 0; i < 3; i++)
+	{
+		myfile << setw(8) << left << film[x].day[i].hari << i + 14 << " April 2023    " << setw(24) << right << totalanak[i] << "|";
+		myfile << setw(24) << right << totaldewasa[i] << "|" << setw(25) << right << gabung[i];
+		myfile << setw(3) << left << "|Rp" << setw(15) << right << totaluang[i] << endl;
+	}
+	myfile.close();
+}
