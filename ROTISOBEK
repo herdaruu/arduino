@@ -1,0 +1,739 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+#include <conio.h>
+
+
+using namespace std;
+
+bool login, laporan, direktur11, admin11, pembeli11;
+
+//Dekklarasi variabel yang dibutuhkan
+//variabel untuk login
+string input, pass;
+string direktur = "abc", passd = "123"; //direktur
+string admin = "111", passa = "111";//admin
+string pembeli = "222", psw = "222"; //pembeli
+
+//bakery=rasa
+//bread=jenisroti
+//gede=size
+//t: hari, w : bread / jenis roti, x : bakery / rasa, y : ukuran
+
+struct ukuran //UKURAN ROTI
+{
+	string size;
+	int stock;
+	int harga;
+	int total;
+};
+
+struct rasa //RASA ROTI
+{
+	string rasa;
+	ukuran gede[3];
+};
+
+struct jenis //JENIS ROTI
+{
+	string jenisroti;
+	rasa bekery[4];
+	int harga1;
+	int penjualan;
+};
+
+
+struct hari
+{
+	string namahari;
+	jenis bread[4];
+	int total;
+};
+
+///////////////////////////////////////////////////////////
+
+hari yolo[3];
+
+
+string uk[3]
+{
+	"kecil","sedang","besar"
+};
+
+string roti[4]
+{
+	"kue ulang tahun", "sncak", "cookies", "bolu"
+};
+
+
+string jadwal[3]
+{
+	"jumat", "sabtu", "Minggu"
+};
+
+string roso[4]
+{
+	"susu", "cokelat", "creme", "straberry"
+};
+
+int harganormal[4]
+{
+	100000,105000,120000,125000
+};
+
+int harg[4]
+{
+	250000,50000,30000,15000
+};
+
+int a, t, w, x, y, z; // t: hari ,w : bread/jenis roti, x : bakery/rasa, y : ukuran 
+int nominal, selisih;
+int hargapesan;
+bool pasti;
+
+void masukdata()
+{
+	for (int u = 0; u < 3; u++)
+	{
+		yolo[u].namahari = jadwal[u];
+
+		for (int l = 0; l < 4; l++)
+		{
+			yolo[u].bread[l].jenisroti = roti[l];
+			yolo[u].bread[l].harga1 = harganormal[l];
+			for (int i = 0; i < 4; i++)
+			{
+				yolo[u].bread[l].bekery[i].rasa = roso[i];
+				for (int j = 0; j < 3; j++)
+				{
+					yolo[u].bread[l].bekery[i].gede[j].size = uk[j];
+					for (int k = 0; k < 3; k++)
+					{
+
+						yolo[u].bread[l].bekery[i].gede[j].stock = 10;// stok awal 
+					}
+				}
+			}
+		}
+	}
+}
+
+void sebelumlogin()
+{
+	int menu;
+awal:
+	cout << "======================================================" << endl;
+	cout << "               PEROGRAM TOKO ROTI                     " << endl;
+	cout << "======================================================" << endl;
+	cout << "= 1. Login" << endl;
+	cout << "= 2. Keluar" << endl;
+	cout << "======================================================" << endl;
+	cout << " Pilih Menu : ";
+	cin >> menu;
+	//Error handling
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+
+	else
+	{
+		if (menu == 1)
+		{
+			login = true;
+			system("CLS");
+		}
+		else if (menu == 2)
+		{
+			login = false;
+		}
+		else
+		{
+			system("CLS");
+			cout << "Maaf Input anda tidak valid\n";
+			cout << "Silahkan pilih lagi dengan benar \n\n";
+			goto awal;
+		}
+	}
+}
+
+void tampilan_login()
+{
+	char password;
+login:
+	cout << "======================================================" << endl;
+	cout << "             PROGRAM PEMESANAN ROTI                   " << endl;
+	cout << "======================================================" << endl;
+	cout << "=                     Log in User                    =" << endl;
+	cout << "======================================================" << endl;
+	cout << "= Masukkan Username : ";
+	cin >> input;
+	cout << "======================================================" << endl;
+	cout << "= Masukkan Password : ";
+
+	// program menyembunyikan karakter di terminal untuk password
+	while (true)
+	{
+		password = _getch();   // agar input tidak ditampikan di terminal
+
+
+		if (password == '\r')  //  \r itu merpukan tombol enter pada keyborad
+		{
+			break;
+		}
+		else if (password == '\b') // \b merupakan tombol backspace
+		{
+			if (pass.length() > 0)
+			{
+				pass.pop_back(); //untuk menghapus karakter terakhir
+				cout << "\b \b";
+			}
+
+		}
+		else
+		{
+			pass.push_back(password); //setiap char yang dimasukkan atau diinputkan akan dipindahkan ke variabel pass
+			cout << "*";
+		}
+
+
+	}
+	cout << "\n======================================================" << endl;
+
+	if (input == direktur)
+	{
+		if (pass == passd)
+		{
+			direktur11 = true;
+			admin11 = false;
+			cout << "= Login berhasil \n";
+			//goto lanjut;
+		}
+		else
+		{
+			system("CLS");
+			cout << " Maaf username atau password salah \n";
+			cout << " Silahkan masukkan username dan password lagi  \n\n\n";
+			goto login;
+		}
+	}
+	else if (input == admin)
+	{
+		if (pass == passa)
+		{
+			direktur11 = false;
+			admin11 = true;
+			cout << "= Login berhasil \n";
+			//goto lanjut;
+		}
+		else
+		{
+			system("CLS");
+			cout << " Maaf username atau password salah \n";
+			cout << " Silahkan masukkan username dan password lagi  \n\n\n";
+			goto login;
+		}
+	}
+	else if (input == pembeli)
+	{
+		if (pass == psw)
+		{
+			direktur11 = false;
+			admin11 = false;
+			pembeli11 = true;
+			cout << "= Login berhasil \n";
+			//goto lanjut;
+		}
+		else
+		{
+			system("CLS");
+			cout << " Maaf username atau password salah \n";
+			cout << " Silahkan masukkan username dan password lagi  \n\n\n";
+			goto login;
+		}
+	}
+	else
+	{
+		system("CLS");
+		cout << " Maaf username atau password salah \n";
+		cout << " Silahkan masukkan username dan password lagi  \n\n\n";
+		goto login;
+	}
+
+}
+
+void tampilan_Hari()
+{
+	int pilih_hari;
+awal:
+	cout << "======================================================" << endl;
+	cout << "              PROGRAM PEMESANAN ROTI                  " << endl;
+	cout << "======================================================" << endl;
+	cout << "=                   PILIH HARI                        =" << endl;
+	cout << "======================================================" << endl;
+	cout << "= 1. " << yolo[0].namahari << endl; //JUMAT
+	cout << "= 2. " << yolo[1].namahari << endl; //SABTU
+	cout << "= 3. " << yolo[2].namahari << endl; //MINGGU
+	cout << "= 9. Keluar" << endl;
+	cout << "======================================================" << endl;
+	cout << " Pilih hari : ";
+	cin >> pilih_hari;
+
+	// program eror handling jika input tidak sesuai dengan tipe data int 
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+	else
+	{
+		if (pilih_hari != 9)
+		{
+			pasti = true;
+			if (pilih_hari > 0 && pilih_hari < 4)
+			{
+				t = pilih_hari - 1;
+			}
+			else
+			{
+				system("CLS");
+				cout << "Maaf Input anda tidak valid\n";
+				cout << "Silahkan pilih lagi dengan benar \n\n";
+				goto awal; //LINE 123
+			}
+		}
+		else
+		{
+			pasti = false;
+		}
+	}
+
+
+}
+
+void tampilan_roti()
+{
+	int pilih_jenis;
+awal:
+	cout << "======================================================" << endl;
+	cout << "             PROGRAM PEMESANAN ROTI                   " << endl;
+	cout << "======================================================" << endl;
+	cout << "HARI : " << yolo[t].namahari << endl; //HARI NYA
+	cout << "=              Jenis roti Yang Tersedia              =" << endl;
+	cout << "======================================================" << endl;
+	cout << "= 1. " << setw(15) << left << yolo[t].bread[0].jenisroti << setw(10) << right << "Rp " << yolo[t].bread[0].harga1 << endl;
+	cout << "= 2. " << setw(15) << left << yolo[t].bread[1].jenisroti << setw(10) << right << "Rp " << yolo[t].bread[1].harga1 << endl;
+	cout << "= 3. " << setw(15) << left << yolo[t].bread[2].jenisroti << setw(10) << right << "Rp " << yolo[t].bread[2].harga1 << endl;
+	cout << "= 4. " << setw(15) << left << yolo[t].bread[3].jenisroti << setw(10) << right << "Rp " << yolo[t].bread[3].harga1 << endl;
+	cout << "= 9. Keluar" << endl;
+	cout << "======================================================" << endl;
+	cout << " Pilih Jenis ROTI : ";
+	cin >> pilih_jenis;
+
+	// program eror handling jika input tidak sesuai dengan tipe data int 
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+	else
+	{
+		if (pilih_jenis != 9)
+		{
+			pasti = true;
+			if (pilih_jenis > 0 && pilih_jenis < 5)
+			{
+				w = pilih_jenis - 1;
+			}
+			else
+			{
+				system("CLS");
+				cout << "Maaf Input anda tidak valid\n";
+				cout << "Silahkan pilih lagi dengan benar \n\n";
+				goto awal;
+			}
+		}
+		else
+		{
+			pasti = false;
+		}
+	}
+
+
+}
+
+void tampilan_selera() //tampilan rasa
+{
+	system("CLS");
+	int pilih_rasa;
+awal:
+	cout << "==========================================================================" << endl;
+	cout << "                       PROGRAM PEMESANAN ROTI                             " << endl;
+	cout << "==========================================================================" << endl;
+	cout << "= Roti : " << yolo[t].bread[w].jenisroti << endl;
+	cout << "==========================================================================" << endl;
+	cout << "=                          Pilih rasa roti                               =" << endl;
+	cout << "==========================================================================" << endl;
+	for (int i = 0; i < 4; i++)
+	{
+		cout << "= " << i + 1 << ". " << setw(15) << left << yolo[t].bread[w].bekery[i].rasa << endl;
+	}
+	cout << "==========================================================================" << endl;
+	cout << "= ketik 9 untuk Kembali ke menu roti\n";
+	cout << "==========================================================================" << endl;
+	cout << " Pilih Warna ROTI: ";
+	cin >> pilih_rasa;
+
+
+	//Error handling
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+	else
+	{
+		if (pilih_rasa != 9)
+		{
+			pasti = true;
+			if (pilih_rasa > 0 && pilih_rasa < 4)
+			{
+				x = pilih_rasa - 1;
+				goto akhir;
+			}
+			else
+			{
+				system("CLS");
+				cout << "Maaf Input anda tidak valid\n";
+				cout << "Silahkan pilih lagi dengan benar \n\n";
+				goto awal;
+			}
+		}
+		else
+		{
+			pasti = false;
+		}
+	}
+akhir:
+	system("CLS");
+}
+
+void tampilan_ukuran()
+{
+	int pilih_ukuran, jumlah, harga3;
+awal:
+	cout << "======================================================" << endl;
+	cout << "               PROGRAM PEMESANAN ROTI                 " << endl;
+	cout << "======================================================" << endl;
+	cout << "= Jenis : " << yolo[t].bread[w].jenisroti << endl;
+	cout << "= rasa  : " << yolo[t].bread[w].bekery[x].rasa << endl;
+	cout << "======================================================" << endl;
+	cout << "=                   PILIH UKURAN ROTI                =" << endl;
+	cout << "======================================================" << endl;
+	for (int i = 0; i < 3; i++)
+	{
+		cout << "= " << i + 1 << ". " << setw(7) << left << uk[i];
+		harga3 = yolo[t].bread[w].harga1 + i * 5000;
+		cout << setw(15) << right << "RP " << harga3 << "  ";
+		yolo[t].bread[w].bekery[x].gede[i].harga = harga3;
+		cout << setw(15) << right << "Stock tersedia : " << yolo[t].bread[w].bekery[x].gede[y].stock << " =" << endl;
+	}
+	cout << "======================================================" << endl;
+	cout << "= ketik 9 untuk Kembali ke menu roti\n";
+	cout << "======================================================" << endl;
+	cout << " Pilih ukuran : ";
+	cin >> pilih_ukuran;
+
+	//error handling
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+	else
+	{
+		if (pilih_ukuran != 9)
+		{
+			pasti = true;
+			if (pilih_ukuran > 0 && pilih_ukuran < 4)
+			{
+				y = pilih_ukuran - 1;
+			}
+			else
+			{
+				system("CLS");
+				cout << "Maaf Input anda tidak valid\n";
+				cout << "Silahkan pilih lagi dengan benar \n\n";
+				goto awal;
+			}
+		}
+		else
+		{
+			pasti = false;
+		}
+	}
+awal33:
+	cout << "======================================================" << endl;
+	cout << " Jumlah yang ingin dipesan : ";
+	cin >> jumlah;
+	if (cin.fail())
+	{
+		system("CLS");
+		cout << "Input tidak berupa angka, Silahkan coba lagi\n\n";
+		cin.clear();  //untuk menghapus status error pada cin
+		cin.ignore(); // untuk menghapus innput yang sudah tersimpan
+		goto awal;
+
+	}
+	else
+	{
+		if (jumlah < yolo[t].bread[w].bekery[x].gede[y].stock)
+		{
+			hargapesan = yolo[t].bread[w].bekery[x].gede[y].harga * jumlah;
+			yolo[t].bread[w].bekery[x].gede[y].stock -= jumlah;
+		}
+		else
+		{
+			system("CLS");
+			cout << "Maaf stock tidak tersedia \n";
+			goto awal33;
+		}
+	}
+	system("CLS");
+}
+
+void semua()
+{
+
+	cout << "======================================================" << endl;
+	cout << "                   PROGRAM TOKO ROTI                  " << endl;
+	cout << "======================================================" << endl;
+	cout << "=                      Pesanan                       =" << endl;
+	cout << "======================================================" << endl;
+	cout << "= Jenis     : " << yolo[t].bread[w].jenisroti << endl;
+	cout << "= Rasa      : " << yolo[t].bread[w].bekery[x].rasa << endl;
+	cout << "= Size      : " << yolo[t].bread[w].bekery[x].gede[y].size << endl;
+	cout << "======================================================" << endl;
+	cout << "= Jumlah " << yolo[t].bread[w].jenisroti << " yang dipesan : ";
+	cout << 10 - yolo[t].bread[w].bekery[x].gede[y].stock << endl;
+	cout << "======================================================" << endl;
+	cout << endl;
+ulang1:
+	cout << "Total        : Rp" << hargapesan << endl;
+	cout << "======================================================" << endl;
+
+	cout << "	Silahkan Lakukan pembayaran \n ";
+	cout << "	Masukkan nominal uang : Rp";
+	cin >> nominal;
+	cout << "======================================================" << endl;
+	if (nominal >= hargapesan)
+	{
+		yolo[t].bread[w].bekery[x].gede[y].total += hargapesan;
+		selisih = nominal - hargapesan;
+		if (selisih > 0)
+		{
+			cout << "Silahkan ambil kembalian anda : Rp" << selisih << endl;
+
+		}
+		else
+		{
+			cout << "Uang anda pas";
+		}
+		a++;
+
+	}
+	else
+	{
+		system("CLS");
+		cout << "Maaf uang anda kurang " << endl;
+		cout << "Masukkan nomial yang sesuai dengan harga\n\n";
+		goto ulang1;
+	}
+}
+
+void cetak_struc(int a)
+{
+	int* kode;
+	//untuk menampilkan harga
+	string jumlahpesanan = to_string(a);
+	ofstream myfile;
+	myfile.open("Tiket " + jumlahpesanan + ".txt", ios::trunc);
+	myfile << "======================================================" << endl;
+	myfile << "             PROGRAM PEMESANAN ROTI                   " << endl;
+	myfile << "======================================================" << endl;
+	myfile << "=                      Pesanan                       =" << endl;
+	myfile << "======================================================" << endl;
+	myfile << "= Jenis     : " << yolo[t].bread[w].jenisroti << endl;
+	myfile << "= Rasa      : " << yolo[t].bread[w].bekery[x].rasa << endl;
+	myfile << "= Size      : " << yolo[t].bread[w].bekery[x].gede[y].size << endl;
+	myfile << "======================================================" << endl;
+	myfile << "= Jumlah " << yolo[t].bread[w].jenisroti << " yang dipesan : ";
+	myfile << 10 - yolo[t].bread[w].bekery[x].gede[y].stock << endl;
+	myfile << "======================================================" << endl;
+	myfile << endl;
+	myfile << "Total        : Rp " << hargapesan << endl;
+	myfile << "======================================================" << endl;
+	myfile << "Pembayaran   : Rp " << nominal << endl;
+	myfile << "Kembalian    : RP " << selisih << endl;
+	myfile.close();
+}
+
+void tampilan_keuangan()
+{
+	for (int u = 0; u < 3; u++)
+	{
+		cout << setw(10) << left << yolo[u].namahari << endl;
+		for (int l = 0; l < 4; l++)
+		{
+			cout << setw(18) << right << "+" << setw(8) << left << yolo[u].bread[l].jenisroti << endl;
+			for (int i = 0; i < 4; i++)
+			{
+				cout << setw(28) << left << " " << setw(10) << left << yolo[u].bread[l].bekery[i].rasa;
+				for (int j = 0; j < 3; j++)
+				{
+					for (int k = 0; k < 4; k++)
+					{
+						yolo[u].bread[l].penjualan += yolo[u].bread[l].bekery[i].gede[j].total;
+					}
+				}
+				cout << setw(8) << right << "Rp" << yolo[u].bread[l].penjualan << endl;
+			}
+		}
+		cout << "\n\n\n";
+	}
+}
+
+void cetak()
+{
+	ofstream myfile;
+	myfile.open("Laporan.txt", ios::trunc);
+	for (int u = 0; u < 3; u++)
+	{
+		myfile << setw(10) << left << yolo[u].namahari << endl;
+		for (int l = 0; l < 4; l++)
+		{
+			myfile << setw(18) << right << "+" << setw(8) << left << yolo[u].bread[l].jenisroti << endl;
+			for (int i = 0; i < 4; i++)
+			{
+				myfile << setw(28) << left << " " << setw(10) << left << yolo[u].bread[l].bekery[i].rasa;
+				for (int j = 0; j < 3; j++)
+				{
+					for (int k = 0; k < 4; k++)
+					{
+						yolo[u].bread[l].penjualan += yolo[u].bread[l].bekery[i].gede[j].total;
+					}
+				}
+				myfile << setw(8) << right << "Rp" << yolo[u].bread[l].penjualan << endl;
+			}
+		}
+		myfile << "\n\n\n";
+	}
+	myfile.close();
+}
+
+
+int main()
+{
+	int a = 0;
+	char yt;
+	masukdata();
+login1:
+	input = pass = "";
+	sebelumlogin();
+	if (login == false)
+	{
+		goto akhir;
+	}
+	system("CLS");
+	tampilan_login();
+	system("CLS");
+	if (direktur11 == true && admin11 == false && pembeli11 == false ) //DIREKTUR
+	{
+	alo:
+		tampilan_keuangan();
+		cetak();
+	halo1:
+		cout << "\n\n kemenu sebelumnya ? (y/t): ";
+		cin >> yt;
+		if (yt == 'y' || yt == 'Y')
+		{
+			system("CLS");
+			goto alo;
+		}
+		else if (yt == 't' || yt == 'T')
+		{
+			goto akhir;
+		}
+		else
+		{
+			system("CLS");
+			cout << "\n\n Maaf input anda tidak valid\n";
+			goto halo1;
+		}
+
+
+	}
+	else if (direktur11 == false && admin11 == false && pembeli11 == true) //ADMIN
+	{
+
+	}
+	else if (direktur11 == false && pembeli11 == false && admin11 == true) //ADMIN
+	{
+
+
+		masukdata();
+	awal:
+		tampilan_Hari(); //go diskon
+		if (pasti == false)
+		{
+			system("CLS");
+			goto awal;
+		}
+		system("CLS");
+		tampilan_roti();
+		if (pasti == false)
+		{
+			system("CLS");
+			goto awal;
+		}
+		tampilan_selera();
+		if (pasti == false)
+		{
+			system("CLS");
+			goto awal;
+		}
+		tampilan_ukuran();
+		if (pasti == false)
+		{
+			system("CLS");
+			goto awal;
+		}
+		semua();
+		cetak_struc(a);
+	}
+	hargapesan = 0;
+akhir:
+	return 0;
+}
