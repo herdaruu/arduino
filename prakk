@@ -1,0 +1,574 @@
+#include <iostream>
+#include <fstream>
+#include <ctime>
+#include <iostream>
+#include <windows.h>
+#include <string>
+#include <algorithm>
+#include <fstream>
+#include "conio.h"
+
+#pragma warning (disable:4996)
+
+using namespace std;
+
+// Struktur data untuk menu makanan dan minuman
+struct MenuItem {
+    string name;
+    int stock;
+    double price;
+    char package;
+    char paket;
+};
+
+
+// Fungsi untuk mencetak tanggal dan waktu saat ini
+
+string getCurrentDateTime() {
+    time_t now = time(0);
+    char* dt = ctime(&now);
+    return dt;
+}
+
+
+// Fungsi untuk menambahkan menu baru
+void addMenu(MenuItem menus[], int& numMenus) {
+    string name;
+    int stock;
+    double price;
+    char paket;
+
+    cout << "-----------------------"<<endl;
+    cout << "Masukkan nama menu: ";
+    cin >> name;
+    cout << "-----------------------" << endl;
+    cout << "Masukkan stok menu: ";
+    cin >> stock;
+    cout << "-----------------------" << endl;
+    cout << "Masukkan harga menu: ";
+    cin >> price;
+
+
+    menus[numMenus].name = name;
+    menus[numMenus].stock = stock;
+    menus[numMenus].price = price;
+    numMenus++;
+    cout << "=======================" << endl;
+    cout << "Menu berhasil ditambahkan!" << endl;
+    Sleep(1000);
+    system("cls");
+}
+
+// Fungsi untuk melihat semua menu
+void viewMenu(MenuItem menus[], int numMenus) {
+
+    cout << "Daftar Menu:" << endl<<endl;
+    for (int i = 0; i < numMenus; i++) {
+
+        cout << "Nama: " << menus[i].name << "\t             |\t";
+        cout << "Stok: " << menus[i].stock <<" pcs"<< "\t             |\t";
+        cout << "Harga: " <<"Rp. "<< menus[i].price << endl;
+  
+        cout << endl;
+    }
+}
+
+// Fungsi untuk mengubah menu
+void updateMenu(MenuItem menus[], int numMenus) {
+    string name;
+    int stock;
+    double price;
+
+    cout << "-----------------------" << endl;
+    cout << "Masukkan nama menu yang ingin diubah: ";
+    cin >> name;
+
+    bool menuFound = false;
+    int menuIndex;
+
+    for (int i = 0; i < numMenus; i++) {
+        if (menus[i].name == name) {
+            menuFound = true;
+            menuIndex = i;
+            break;
+        }
+    }
+
+    if (menuFound) {
+        cout << "-----------------------" << endl;
+        cout << "Masukkan stok baru: ";
+        cin >> stock;
+        cout << "-----------------------" << endl;
+        cout << "Masukkan harga baru: ";
+        cin >> price;
+
+        menus[menuIndex].stock = stock;
+        menus[menuIndex].price = price;
+
+        cout << "=======================" << endl;
+
+        cout << "Menu berhasil diubah!" << endl;
+        Sleep(1000);
+        system("cls");
+    }
+    else {
+        cout << "Menu tidak ditemukan!" << endl;
+    }
+}
+
+// Fungsi untuk menghapus menu
+void deleteMenu(MenuItem menus[], int& numMenus) {
+    string name;
+
+    cout << "Masukkan nama menu yang ingin dihapus: ";
+    cin >> name;
+
+    bool menuFound = false;
+    int menuIndex;
+
+    for (int i = 0; i < numMenus; i++) {
+        if (menus[i].name == name) {
+            menuFound = true;
+            menuIndex = i;
+            break;
+        }
+    }
+
+    if (menuFound) {
+        // Menggeser menu lainnya untuk mengisi posisi yang dihapus
+        for (int i = menuIndex; i < numMenus - 1; i++) {
+            menus[i] = menus[i + 1];
+        }
+
+        numMenus--;
+
+        cout << "Menu berhasil dihapus!" << endl;
+    }
+    else {
+        cout << "Menu tidak ditemukan!" << endl;
+    }
+}
+
+// Fungsi untuk membeli makanan atau minuman
+void buyMenu(MenuItem menus[], int numMenus) {
+    string name;
+    string pembeli;
+    int quantity;
+    int paket;
+    float rego = 0;
+   
+
+    cout << "-----------------------" << endl;
+    cout << "Masukkan Nama Pembeli:";
+    cin >> pembeli;
+    cout << "-----------------------" << endl;
+    cout << "Masukkan nama menu yang ingin dibeli: ";
+    cin >> name;
+    cout << "-----------------------" << endl;
+    cout << "1. Standard" << endl;
+    cout << "2. Premium" << endl;
+    cout << "3. International" << endl;
+    cout << "-----------------------" << endl;
+    cout << "Jenis Paket:";
+    cin >> paket;
+    cout << "Masukkan jumlah yang ingin dibeli: ";
+    cin >> quantity;
+
+    if (paket == 1)
+    {
+        rego = 0.7;
+    }
+    else if (paket == 2)
+    {
+        rego = 1;
+    }
+    else if (paket == 3)
+    {
+        rego = 1.5;
+    }
+
+    
+
+    bool menuFound = false;
+    int menuIndex;
+    MenuItem* chosenMenuItem = nullptr;
+
+    for (int i = 0; i < numMenus; i++) {
+        if (menus[i].name == name) {
+            menuFound = true;
+            menuIndex = i;
+            chosenMenuItem = &menus[i];
+            break;
+        }
+    }
+
+    if (menuFound) {
+        if (chosenMenuItem->stock >= quantity) {
+            double totalPrice = chosenMenuItem->price * quantity*rego;
+            if (totalPrice > 100000)
+            {
+                totalPrice = totalPrice * 0.88;
+            }
+
+
+            chosenMenuItem->stock -= quantity;
+
+            // Menyimpan informasi struk ke file .txt
+            ofstream outfile;
+            outfile.open("NamaUser.txt", ios_base::app);
+            outfile << "======= Struk Pembelian =======\n";
+            outfile << "Nama: " << pembeli<< "\n";
+            outfile << "Nama Menu: " << chosenMenuItem->name << "\n";
+            outfile << "Harga: " << chosenMenuItem->price << "\n";
+            outfile << "Jumlah: " << quantity << "\n";
+            outfile << "Total Harga: " << totalPrice  << "\n";
+            outfile << "Tanggal dan Waktu: " << getCurrentDateTime() << "\n";
+            outfile << "Kode Pembelian: " << chosenMenuItem << "\n";
+            outfile << "================================\n";
+            outfile.close();
+
+            cout << "Pembelian berhasil!" << endl;
+            cout << "Total Harga: " << totalPrice  << "\n";
+            cout << "Kode Pembelian: " << chosenMenuItem << endl;
+        }
+        else {
+            cout << "Stok tidak mencukupi!" << endl;
+        }
+    }
+    else {
+        cout << "Menu tidak ditemukan!" << endl;
+        Sleep(1000);
+        system("cls");
+    }
+}
+
+// Fungsi untuk mencetak laporan penjualan
+// Fungsi untuk mencetak laporan penjualan
+void printSalesReport(MenuItem menus[], int numMenus) {
+    double totalSales = 0;
+    double totalProfit = 0;
+
+    // Menghitung total penjualan dan profit
+    for (int i = 0; i < numMenus; i++) {
+        double menuSales = (menus[i].stock * menus[i].price);
+        double menuProfit = (menuSales * 0.3); // 30% dari total penjualan
+        totalSales += menuSales;
+        totalProfit += menuProfit;
+    }
+
+    double donation = (totalProfit * 0.05); // 5% dari profit bersih
+    double directorProfit = (totalProfit * 0.25); // 25% dari profit bersih
+
+    // Menyimpan laporan penjualan ke file .txt
+    ofstream outfile;
+    outfile.open("laporan_penjualan.txt", ios_base::app);
+    outfile << "Laporan Penjualan Restoran" << endl;
+    outfile << "================================" << endl;
+    outfile << "Total Penjualan: " << totalSales << endl;
+    outfile << "Profit Bersih: " << totalProfit << endl;
+    outfile << "Donasi ke Anak Yatim: " << donation << endl;
+    outfile << "Keuntungan yang Bisa Masuk ke Direktur: " << directorProfit << endl;
+    outfile << "================================" << endl;
+    outfile << endl;
+    outfile.close();
+
+    cout << "Laporan penjualan telah dicetak!" << endl;
+}
+
+// Fungsi untuk mencetak struk pembelian (untuk admin)
+void cetakstrukadmin(MenuItem menus[], int numMenus) {
+    string name;
+
+    cout << "Masukkan nama menu yang ingin dicetak struknya: ";
+    cin >> name;
+
+    bool menuFound = false;
+    int menuIndex;
+
+    for (int i = 0; i < numMenus; i++) {
+        if (menus[i].name == name) {
+            menuFound = true;
+            menuIndex = i;
+            break;
+        }
+    }
+
+    if (menuFound) {
+        double totalPrice = menus[menuIndex].price;
+
+        // Menyimpan informasi struk ke file .txt
+        ofstream outfile;
+        outfile.open("StockBahanPokok.txt", ios_base::app);
+
+        outfile << "======= Nota Stock =======\n";
+        outfile << "Nama Menu: " << menus[menuIndex].name << "\n";
+        outfile << "Harga: " << menus[menuIndex].price << "\n";
+        outfile << "Jumlah: " << menus[menuIndex].stock << "\n";
+        outfile << "Harga: " << totalPrice << "\n";
+        outfile << "Tanggal dan Waktu: " << getCurrentDateTime() << "\n";
+        outfile << "================================\n";
+        outfile.close();
+
+        cout << "Struk pembelian berhasil dicetak!" << endl;
+    }
+    else {
+        cout << "Menu tidak ditemukan!" << endl;
+    }
+}
+
+
+void cetakStrukUser(MenuItem* menuItem, int quantity) {
+    double totalPrice = menuItem->price * quantity;
+
+    // Menyimpan informasi struk ke file .txt
+    ofstream outfile;
+    outfile.open("strukuser.txt", ios_base::app);
+    outfile << "======= Struk Pembelian =======\n";
+    outfile << "Nama Menu: " << menuItem->name << "\n";
+    outfile << "Harga: " << menuItem->price << "\n";
+    outfile << "Jumlah: " << quantity << "\n";
+    outfile << "Total Harga: " << totalPrice << "\n";
+    outfile << "Tanggal dan Waktu: " << getCurrentDateTime() << "\n";
+    outfile << "Kode Pembelian: " << menuItem << "\n";
+    outfile << "================================\n";
+    
+    outfile.close();
+
+    cout << "Struk pembelian berhasil dicetak!" << endl;
+    cout << "Kode Pembelian: " << menuItem << endl;
+}
+
+
+
+
+int main() {
+    trus: 
+    const string ADMIN_USERNAME = "admin";
+    const string ADMIN_PASSWORD = "admin123";
+    const string SUPERADMIN_USERNAME = "superadmin";
+    const string SUPERADMIN_PASSWORD = "superadmin123";
+
+    // Inisialisasi menu
+    const int MAX_MENU = 100;
+    MenuItem menus[MAX_MENU];
+    int numMenus = 0;
+
+    int option;
+    string username, password;
+    char ch;
+    while (true)
+    {
+        
+        system("color f1");
+        cout << "=========================================================================================" << endl;
+
+        cout << "|                                   SWALAYAN BU JANICE                                 |" << endl;
+
+        cout << "=========================================================================================" << endl;
+        Sleep(2000);
+        system("color f0");
+        cout << "1. Login Admin" << endl;
+        cout << "2. Login Super Admin" << endl;
+        cout << "3. User" << endl;
+        cout << "4. Keluar" << endl;
+        cout << "Pilih opsi: ";
+        cin >> option;
+
+
+        
+        if (option == 1) {
+            cout << "Masukkan username: ";
+            cin >> username;
+            cout << "Masukkan password: ";
+            while (true) {
+
+                ch = _getch();
+
+                if (ch == '\r') { //arti \r adalah enter
+
+                    break;
+
+                }
+
+                else if (ch == '\b' && password.length() > 0) {
+
+                    password.pop_back();
+
+                    cout << "\b \b"; //arti \b adalah backspace
+
+                }
+
+                else {
+
+                    password += ch;
+
+                    cout << "*";
+
+                }
+
+            }
+
+
+            if (username == ADMIN_USERNAME && password == ADMIN_PASSWORD) {
+                system("cls");
+                while (true) {
+                
+                    cout << "================================="<<endl;
+                    cout << "       Selamat datang, Admin!" << endl;
+                    cout << "=================================" << endl;
+                    cout << "1. Tambah Menu" << endl;
+                    cout << "2. Lihat Menu" << endl;
+                    cout << "3. Ubah Menu" << endl;
+                    cout << "4. Hapus Menu" << endl;
+                    cout << "5. Cetak Struk" << endl;
+                    cout << "6. Kembali" << endl<<endl;
+                    cout << "=================================" << endl;
+
+                    cout << "Pilih opsi: ";
+                    cin >> option;
+
+                    if (option == 1) {
+                        system("cls");
+                        addMenu(menus, numMenus);
+                    }
+                    else if (option == 2) {
+                        system("cls");
+                        viewMenu(menus, numMenus);
+                    }
+                    else if (option == 3) {
+                        system("cls");
+                        updateMenu(menus, numMenus);
+                    }
+                    else if (option == 4) {
+                        system("cls");
+                        deleteMenu(menus, numMenus);
+                    }
+                    else if (option == 5) {
+                        system("cls");
+                        cetakstrukadmin(menus, numMenus);
+
+                    }
+                    else if (option == 6) {
+                        system("cls");
+                        break;
+                    }
+                    else {
+                        cout << "Opsi tidak valid!" << endl;
+                    }
+                }
+            }
+            else {
+                cout << endl;
+                cout << "Username atau password salah!" << endl;
+                goto trus;
+            }
+        }
+        else if (option == 2) {
+            cout << "Masukkan username: ";
+            cin >> username;
+            cout << "Masukkan password: ";
+            while (true) {
+
+                ch = _getch();
+
+                if (ch == '\r') { //arti \r adalah enter
+
+                    break;
+
+                }
+
+                else if (ch == '\b' && password.length() > 0) {
+
+                    password.pop_back();
+
+                    cout << "\b \b"; //arti \b adalah backspace
+
+                }
+
+                else {
+
+                    password += ch;
+
+                    cout << "*";
+
+                }
+
+            }
+
+            if (username == SUPERADMIN_USERNAME && password == SUPERADMIN_PASSWORD) {
+                system("cls");
+                while (true) {
+                    cout << "Selamat datang, Super Admin!" << endl;
+                    cout << "1. Laporan Penjualan" << endl;
+                    cout << "2. Kembali" << endl;
+                    cout << "Pilih opsi: ";
+                    cin >> option;
+
+                    if (option == 1) {
+                        system("cls");
+                        printSalesReport(menus, numMenus);
+                    }
+                    else if (option == 2) {
+                        system("cls");
+                        break;
+                    }
+                    else {
+                        cout << "Opsi tidak valid!" << endl;
+                    }
+                }
+            }
+            else {
+                cout << "Username atau password salah!" << endl;
+                goto trus;
+            }
+        }
+        else if (option == 3) {
+            system("cls");
+            while (true) {
+
+                cout << "<><><<><><><><><><><><><><><><><>"<<endl;
+                cout << "Selamat datang, User!" << endl;
+                cout << "<><><<><><><><><><><><><><><><><>" << endl << endl;
+
+                cout << "1. Lihat Menu" << endl;
+                cout << "2. Beli Menu" << endl;
+                cout << "3. cetak" << endl;
+                cout << "4. cancel" << endl;
+                cout << "5.Exit" << endl;
+                cout << "Pilih opsi: ";
+                cin >> option;
+
+                if (option == 1) {
+                    system("cls");
+
+                    viewMenu(menus, numMenus);
+                }
+                else if (option == 2) {
+                    system("cls");
+                    buyMenu(menus, numMenus);
+                }
+                else if (option == 5) {
+                    system("cls");
+
+                    break;
+                }
+                else if (option == 3) {
+                    system("cls");
+                    cetakStrukUser(menus, numMenus);
+                }
+                else {
+                    cout << "Opsi tidak valid!" << endl;
+                }
+            }
+        }
+        else if (option == 4) {
+            system("cls");
+            break;
+        }
+        else {
+            cout << "Opsi tidak valid!" << endl;
+        }
+    }
+
+    return 0;
+}
