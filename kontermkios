@@ -1,0 +1,59 @@
+#include <Arduino.h>
+#include <TM1637Display.h>
+#include <Keypad.h>
+
+#define CLK 2 // Mengatur pin untuk CLK
+#define DIO 3 // Mengatur pin untuk DIO
+TM1637Display display(CLK, DIO);
+
+const byte ROW_NUM = 4; // Empat baris
+const byte COL_NUM = 4; // Empat kolom
+
+// Membuat karakter pada keypad
+char keys[ROW_NUM][COL_NUM] = {
+  {'1','2','3', 'A'},
+  {'4','5','6', 'B'},
+  {'7','8','9', 'C'},
+  {'*','0','#', 'D'}
+};
+
+byte pin_rows[ROW_NUM] = {9, 8, 7, 6}; // Koneksi untuk baris  : dari pin 9 sampai 6
+byte pin_column[COL_NUM] = {5, 4, 3, 2}; // Koneksi untuk kolom : dari pin 5 sampai 2
+
+Keypad keypad = Keypad(makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COL_NUM);
+
+int counter = 2023;
+bool paused = true;
+bool reset = false;
+
+void setup() {
+  display.setBrightness(0x0f);  // Mengatur kecerahan maksimal
+  display.showNumberDec(counter, true);  // Menampilkan angka awal pada display
+}
+
+void loop() {
+  char key = keypad.getKey();
+  if (key == 'A') {
+    paused = false;
+  }
+
+  if (key == 'B') {
+    paused = true;
+  }
+
+  if (key == 'C' && paused) {
+    counter = 2023;
+    reset = true;
+  }
+
+  if (!paused && !reset) {
+    display.showNumberDec(counter, true);  // Menampilkan angka pada display
+    counter--;
+    delay(1000);  // Delay 1 detik
+  }
+
+  if (reset) {
+    display.showNumberDec(counter, true);  // Menampilkan angka reset pada display
+    reset = false;
+  }
+}
